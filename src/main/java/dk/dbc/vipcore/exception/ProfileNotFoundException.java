@@ -5,7 +5,7 @@
 
 package dk.dbc.vipcore.exception;
 
-public class ProfileNotFoundException extends VipCoreException{
+public class ProfileNotFoundException extends VipCoreException {
 
     public ProfileNotFoundException() {
         super("profile_not_found");

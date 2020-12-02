@@ -5,7 +5,7 @@
 
 package dk.dbc.vipcore.exception;
 
-public class NoAgenciesFoundException extends VipCoreException{
+public class NoAgenciesFoundException extends VipCoreException {
 
     public NoAgenciesFoundException() {
         super("no_agencies_found");

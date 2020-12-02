@@ -5,7 +5,7 @@
 
 package dk.dbc.vipcore.exception;
 
-public class NoUserIdSelectedException extends VipCoreException{
+public class NoUserIdSelectedException extends VipCoreException {
 
     public NoUserIdSelectedException() {
         super("no_userid_selected");

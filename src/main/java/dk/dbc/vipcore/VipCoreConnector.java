@@ -3,7 +3,6 @@ package dk.dbc.vipcore;
 import dk.dbc.httpclient.FailSafeHttpClient;
 import dk.dbc.httpclient.HttpPost;
 import dk.dbc.invariant.InvariantUtil;
-import dk.dbc.jsonb.JSONBContext;
 import dk.dbc.util.Stopwatch;
 import dk.dbc.vipcore.dto.ErrorMessageDTO;
 import dk.dbc.vipcore.exception.AgencyNotFoundException;
