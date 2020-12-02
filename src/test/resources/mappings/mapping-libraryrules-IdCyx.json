@@ -1,0 +1,22 @@
+{
+  "id" : "c16c2fa1-9e0d-3ca7-99ee-4850357a5dac",
+  "request" : {
+    "url" : "/libraryrules",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"agencyId\":\"010100\"}",
+      "ignoreArrayOrder" : true,
+      "ignoreExtraElements" : true
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-libraryrules-IdCyx.json",
+    "headers" : {
+      "Server" : "Payara Micro #badassfish",
+      "Content-Type" : "application/json",
+      "X-Frame-Options" : "SAMEORIGIN"
+    }
+  },
+  "uuid" : "c16c2fa1-9e0d-3ca7-99ee-4850357a5dac"
+}

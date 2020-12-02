@@ -1,0 +1,22 @@
+{
+  "id" : "288ae7eb-e418-3d3f-802e-cbb7beb9e86b",
+  "request" : {
+    "url" : "/libraryrules",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"libraryRule\":[{\"name\":\"use_enrichments\",\"bool\":true}]}",
+      "ignoreArrayOrder" : true,
+      "ignoreExtraElements" : true
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-libraryrules-qSvl0.json",
+    "headers" : {
+      "Server" : "Payara Micro #badassfish",
+      "Content-Type" : "application/json",
+      "X-Frame-Options" : "SAMEORIGIN"
+    }
+  },
+  "uuid" : "288ae7eb-e418-3d3f-802e-cbb7beb9e86b"
+}

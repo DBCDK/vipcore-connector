@@ -1,0 +1,22 @@
+{
+  "id" : "74633a9c-d450-3e59-b5b5-8b74e9016524",
+  "request" : {
+    "url" : "/libraryrules",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"libraryRule\":[{\"name\":\"cataloging_template_set\",\"string\":\"julemanden\"}]}",
+      "ignoreArrayOrder" : true,
+      "ignoreExtraElements" : true
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-libraryrules-Nf7GN.json",
+    "headers" : {
+      "Server" : "Payara Micro #badassfish",
+      "Content-Type" : "application/json",
+      "X-Frame-Options" : "SAMEORIGIN"
+    }
+  },
+  "uuid" : "74633a9c-d450-3e59-b5b5-8b74e9016524"
+}

@@ -1,0 +1,22 @@
+{
+  "id" : "345b4a4c-c034-34e7-a244-c30d7916d1fe",
+  "request" : {
+    "url" : "/libraryrules",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"libraryRule\":[{\"name\":\"cataloging_template_set\",\"string\":\"fbs\"}]}",
+      "ignoreArrayOrder" : true,
+      "ignoreExtraElements" : true
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-libraryrules-vlct8.json",
+    "headers" : {
+      "Server" : "Payara Micro #badassfish",
+      "Content-Type" : "application/json",
+      "X-Frame-Options" : "SAMEORIGIN"
+    }
+  },
+  "uuid" : "345b4a4c-c034-34e7-a244-c30d7916d1fe"
+}
