@@ -47,7 +47,7 @@ pipeline {
 		}
 		stage("deploy") {
 			when {
-				branch "master"
+				branch "main"
 			}
 			steps {
 				sh "mvn jar:jar deploy:deploy"
