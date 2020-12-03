@@ -5,9 +5,9 @@
 
 package dk.dbc.vipcore.libraryrules;
 
+import dk.dbc.commons.jsonb.JSONBContext;
+import dk.dbc.commons.jsonb.JSONBException;
 import dk.dbc.httpclient.FailSafeHttpClient;
-import dk.dbc.jsonb.JSONBContext;
-import dk.dbc.jsonb.JSONBException;
 import dk.dbc.vipcore.VipCoreConnector;
 import dk.dbc.vipcore.exception.VipCoreException;
 import dk.dbc.vipcore.marshallers.LibraryRule;
