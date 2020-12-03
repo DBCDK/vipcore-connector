@@ -20,21 +20,6 @@
         <relativePath/>
     </parent>
 
-    <repositories>
-        <repository>
-            <id>mavenrepo.dbc.dk</id>
-            <url>http://mavenrepo.dbc.dk/content/groups/public/</url>
-        </repository>
-    </repositories>
-
-    <distributionManagement>
-        <repository>
-            <id>mavenrepo.dbc.dk</id>
-            <name>mavenrepo</name>
-            <url>http://mavenrepo.dbc.dk/content/repositories/snapshots</url>
-        </repository>
-    </distributionManagement>
-
     <properties>
         <maven.compiler.plugin.version>3.8.0</maven.compiler.plugin.version>
         <microprofile.version>1.3</microprofile.version>
