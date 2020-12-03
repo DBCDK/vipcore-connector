@@ -4,13 +4,11 @@ def workerNode = "devel10"
 
 pipeline {
 	agent {label workerNode}
-	triggers {
-		pollSCM("H/03 * * * *")
-	}
 	options {
 		timestamps()
 	}
 	tools {
+		jdk "jdk1.8"
         maven "Maven 3"
     }
 	stages {
@@ -22,27 +20,18 @@ pipeline {
 		}
 		stage("verify") {
 			steps {
-				sh "mvn verify pmd:pmd"
-				junit "target/surefire-reports/TEST-*.xml"
-			}
-		}
-		stage("warnings") {
-			agent {label workerNode}
-			steps {
-				warnings consoleParsers: [
-					[parserName: "Java Compiler (javac)"]
-				],
-					unstableTotalAll: "0",
-					failedTotalAll: "0"
-			}
-		}
-		stage("pmd") {
-			agent {label workerNode}
-			steps {
-				step([$class: 'hudson.plugins.pmd.PmdPublisher',
-					  pattern: 'target/pmd.xml',
-					  unstableTotalAll: "0",
-					  failedTotalAll: "0"])
+				sh "mvn verify pmd:pmd javadoc:aggregate"
+
+				junit testResults: 'target/surefire-reports/TEST-*.xml'
+
+				script {
+					def java = scanForIssues tool: [$class: 'Java']
+					def javadoc = scanForIssues tool: [$class: 'JavaDoc']
+					publishIssues issues: [java, javadoc]
+
+					def pmd = scanForIssues tool: [$class: 'Pmd'], pattern: '**/target/pmd.xml'
+					publishIssues issues: [pmd]
+				}
 			}
 		}
 		stage("deploy") {
