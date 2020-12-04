@@ -14,6 +14,7 @@ import dk.dbc.vipcore.marshallers.LibraryRule;
 import dk.dbc.vipcore.marshallers.LibraryRules;
 import dk.dbc.vipcore.marshallers.LibraryRulesRequest;
 import dk.dbc.vipcore.marshallers.LibraryRulesResponse;
+import org.apache.commons.collections4.map.PassiveExpiringMap;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -22,12 +23,17 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 
 public class VipCoreLibraryRulesConnector extends VipCoreConnector {
     private static final JSONBContext jsonbContext = new JSONBContext();
 
     private static final Logger LOGGER = LoggerFactory.getLogger(VipCoreLibraryRulesConnector.class);
+
+    private static final int MAX_CACHE_AGE = 8;
+    private static PassiveExpiringMap<String, Set<String>> LIBRARY_RULE_CACHE;
+    private static PassiveExpiringMap<String, List<LibraryRule>> LIBRARY_RULES_BY_AGENCY_ID_CACHE;
 
     public enum Rule {
         CREATE_ENRICHMENTS("create_enrichments"),
@@ -74,6 +80,9 @@ public class VipCoreLibraryRulesConnector extends VipCoreConnector {
      */
     public VipCoreLibraryRulesConnector(Client httpClient, String baseUrl) {
         super(httpClient, baseUrl, TimingLogLevel.INFO);
+
+        LIBRARY_RULE_CACHE = new PassiveExpiringMap<>(MAX_CACHE_AGE, TimeUnit.HOURS);
+        LIBRARY_RULES_BY_AGENCY_ID_CACHE = new PassiveExpiringMap<>(MAX_CACHE_AGE, TimeUnit.HOURS);
     }
 
     /**
@@ -83,8 +92,11 @@ public class VipCoreLibraryRulesConnector extends VipCoreConnector {
      * @param baseUrl    base URL for vipcore service endpoint
      * @param level      timings log level
      */
-    public VipCoreLibraryRulesConnector(Client httpClient, String baseUrl, TimingLogLevel level) {
+    public VipCoreLibraryRulesConnector(Client httpClient, String baseUrl, int cacheAge, TimingLogLevel level) {
         super(httpClient, baseUrl, level);
+
+        LIBRARY_RULE_CACHE = new PassiveExpiringMap<>(cacheAge, TimeUnit.HOURS);
+        LIBRARY_RULES_BY_AGENCY_ID_CACHE = new PassiveExpiringMap<>(cacheAge, TimeUnit.HOURS);
     }
 
     /**
@@ -95,6 +107,9 @@ public class VipCoreLibraryRulesConnector extends VipCoreConnector {
      */
     public VipCoreLibraryRulesConnector(FailSafeHttpClient failSafeHttpClient, String baseUrl) {
         super(failSafeHttpClient, baseUrl, TimingLogLevel.INFO);
+
+        LIBRARY_RULE_CACHE = new PassiveExpiringMap<>(MAX_CACHE_AGE, TimeUnit.HOURS);
+        LIBRARY_RULES_BY_AGENCY_ID_CACHE = new PassiveExpiringMap<>(MAX_CACHE_AGE, TimeUnit.HOURS);
     }
 
     /**
@@ -104,8 +119,11 @@ public class VipCoreLibraryRulesConnector extends VipCoreConnector {
      * @param baseUrl            base URL for vipcore service endpoint
      * @param level              timings log level
      */
-    public VipCoreLibraryRulesConnector(FailSafeHttpClient failSafeHttpClient, String baseUrl, TimingLogLevel level) {
+    public VipCoreLibraryRulesConnector(FailSafeHttpClient failSafeHttpClient, String baseUrl, int cacheAge, TimingLogLevel level) {
         super(failSafeHttpClient, baseUrl, level);
+
+        LIBRARY_RULE_CACHE = new PassiveExpiringMap<>(cacheAge, TimeUnit.HOURS);
+        LIBRARY_RULES_BY_AGENCY_ID_CACHE = new PassiveExpiringMap<>(cacheAge, TimeUnit.HOURS);
     }
 
     public boolean hasFeature(int agencyId, Rule feature) throws VipCoreException {
@@ -134,18 +152,24 @@ public class VipCoreLibraryRulesConnector extends VipCoreConnector {
 
     public List<LibraryRule> getLibraryRulesByAgencyId(String agencyId) throws VipCoreException {
         try {
-            final LibraryRulesRequest libraryRulesRequest = new LibraryRulesRequest();
-            libraryRulesRequest.setAgencyId(agencyId);
+            List<LibraryRule> cacheValue = LIBRARY_RULES_BY_AGENCY_ID_CACHE.get(agencyId);
+            if (cacheValue != null) {
+                return cacheValue;
+            } else {
+                final LibraryRulesRequest libraryRulesRequest = new LibraryRulesRequest();
+                libraryRulesRequest.setAgencyId(agencyId);
 
-            final LibraryRulesResponse libraryRulesResponse = postRequest(LIBRARY_RULES_PATH, jsonbContext.marshall(libraryRulesRequest), LibraryRulesResponse.class);
+                final LibraryRulesResponse libraryRulesResponse = postRequest(LIBRARY_RULES_PATH, jsonbContext.marshall(libraryRulesRequest), LibraryRulesResponse.class);
 
-            for (LibraryRules libraryRules : libraryRulesResponse.getLibraryRules()) {
-                if (agencyId.equals(libraryRules.getAgencyId())) {
-                    return libraryRules.getLibraryRule();
+                for (LibraryRules libraryRules : libraryRulesResponse.getLibraryRules()) {
+                    if (agencyId.equals(libraryRules.getAgencyId())) {
+                        LIBRARY_RULES_BY_AGENCY_ID_CACHE.put(agencyId, libraryRules.getLibraryRule());
+                        return libraryRules.getLibraryRule();
+                    }
                 }
-            }
 
-            throw new VipCoreLibraryRulesConnectorException(String.format("Could not find LibraryRules for agencyId %s", agencyId));
+                throw new VipCoreLibraryRulesConnectorException(String.format("Could not find LibraryRules for agencyId %s", agencyId));
+            }
         } catch (JSONBException e) {
             LOGGER.error("Caught unexpected JSONBException", e);
             throw new VipCoreLibraryRulesConnectorException("Caught unexpected JSONBException", e);
@@ -169,27 +193,51 @@ public class VipCoreLibraryRulesConnector extends VipCoreConnector {
     }
 
     private Set<String> postLibraryRulesRequest(LibraryRule libraryRule) throws VipCoreException {
-        final Set<String> result = new HashSet<>();
+        Set<String> result;
         try {
+            final String libraryRuleCacheKey = createLibraryRuleCacheKey(libraryRule);
+            result = LIBRARY_RULE_CACHE.get(libraryRuleCacheKey);
+            if (result != null) {
+                return result;
+            }
+
             final List<LibraryRule> libraryRuleList = Collections.singletonList(libraryRule);
             final LibraryRulesRequest libraryRulesRequest = new LibraryRulesRequest();
             libraryRulesRequest.setLibraryRule(libraryRuleList);
 
             final LibraryRulesResponse libraryRulesResponse = postRequest(LIBRARY_RULES_PATH, jsonbContext.marshall(libraryRulesRequest), LibraryRulesResponse.class);
 
-            if (libraryRulesResponse.getLibraryRules() == null) {
+            if (libraryRulesResponse.getLibraryRules() != null) {
+                result = libraryRulesResponse.getLibraryRules().stream()
+                        .map(LibraryRules::getAgencyId)
+                        .collect(Collectors.toSet());
+            } else {
                 // If libraryRulesResponse.getLibraryRules() is null it is because no libraries with that rule was found
-                return result;
+                result = new HashSet<>();
             }
 
-            return libraryRulesResponse.getLibraryRules().stream()
-                    .map(LibraryRules::getAgencyId)
-                    .collect(Collectors.toSet());
+            LIBRARY_RULE_CACHE.put(libraryRuleCacheKey, result);
+
+            return result;
         } catch (JSONBException e) {
             LOGGER.error("Caught unexpected JSONBException", e);
             throw new VipCoreLibraryRulesConnectorException("Caught unexpected JSONBException", e);
 
         }
+    }
+
+    private String createLibraryRuleCacheKey(LibraryRule libraryRule) {
+        StringBuilder stringBuilder = new StringBuilder();
+
+        stringBuilder.append(libraryRule.getName().toUpperCase());
+        stringBuilder.append("_");
+        if (libraryRule.getBool() != null) {
+            stringBuilder.append(libraryRule.getBool().toString().toUpperCase());
+        } else {
+            stringBuilder.append(libraryRule.getString().toUpperCase());
+        }
+
+        return stringBuilder.toString();
     }
 
 }

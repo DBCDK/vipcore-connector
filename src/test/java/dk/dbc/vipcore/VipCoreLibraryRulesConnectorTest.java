@@ -51,7 +51,7 @@ public class VipCoreLibraryRulesConnectorTest {
 
     @BeforeAll
     static void setConnector() {
-        connector = new VipCoreLibraryRulesConnector(CLIENT, wireMockHost, VipCoreConnector.TimingLogLevel.INFO);
+        connector = new VipCoreLibraryRulesConnector(CLIENT, wireMockHost, 0, VipCoreConnector.TimingLogLevel.INFO);
     }
 
     @AfterAll

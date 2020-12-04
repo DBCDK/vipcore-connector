@@ -57,26 +57,30 @@ public class VipCoreLibraryRulesConnectorFactory {
         return new VipCoreLibraryRulesConnector(client, vipcoreServiceBaseUrl);
     }
 
-    public static VipCoreLibraryRulesConnector create(String vipcoreServiceBaseUrl, VipCoreLibraryRulesConnector.TimingLogLevel level) {
+    public static VipCoreLibraryRulesConnector create(String vipcoreServiceBaseUrl, int cacheAge, VipCoreLibraryRulesConnector.TimingLogLevel level) {
         final Client client = HttpClient.newClient(new ClientConfig()
                 .register(new JacksonFeature()));
         LOGGER.info("Creating VipCoreLibraryRulesConnector for: {}", vipcoreServiceBaseUrl);
-        return new VipCoreLibraryRulesConnector(client, vipcoreServiceBaseUrl, level);
+        return new VipCoreLibraryRulesConnector(client, vipcoreServiceBaseUrl, cacheAge, level);
     }
 
     @Inject
-    @ConfigProperty(name = "VIPCORE_SERVICE_URL")
+    @ConfigProperty(name = "VIPCORE_ENDPOINT")
     private String vipcoreServiceBaseUrl;
 
     @Inject
     @ConfigProperty(name = "VIPCORE_SERVICE_TIMING_LOG_LEVEL", defaultValue = "INFO")
     private VipCoreLibraryRulesConnector.TimingLogLevel level;
 
+    @Inject
+    @ConfigProperty(name = "VIPCORE_CACHE_AGE", defaultValue = "8")
+    private int cacheAge;
+
     VipCoreLibraryRulesConnector vipCoreLibraryRulesConnector;
 
     @PostConstruct
     public void initializeConnector() {
-        vipCoreLibraryRulesConnector = VipCoreLibraryRulesConnectorFactory.create(vipcoreServiceBaseUrl, level);
+        vipCoreLibraryRulesConnector = VipCoreLibraryRulesConnectorFactory.create(vipcoreServiceBaseUrl, cacheAge, level);
     }
 
     @Produces
