@@ -7,17 +7,19 @@ package dk.dbc.vipcore;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import dk.dbc.httpclient.HttpClient;
+import dk.dbc.vipcore.exception.AgencyNotFoundException;
+import dk.dbc.vipcore.exception.ErrorInRequestException;
 import dk.dbc.vipcore.exception.VipCoreException;
 import dk.dbc.vipcore.libraryrules.VipCoreLibraryRulesConnector;
 import dk.dbc.vipcore.marshallers.LibraryRule;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import javax.ws.rs.client.Client;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -286,6 +288,12 @@ public class VipCoreLibraryRulesConnectorTest {
         assertThat(connector.getLibrariesByLibraryRule(VipCoreLibraryRulesConnector.Rule.CATALOGING_TEMPLATE_SET, "julemanden"), is(new HashSet<>(
                 Collections.emptyList()
         )));
+    }
+
+    @Test
+    void testForErrors() {
+        Assertions.assertThrows(AgencyNotFoundException.class, () -> connector.getAllowedLibraryRules("000000"), "agency_not_found");
+        Assertions.assertThrows(ErrorInRequestException.class, () -> connector.getAllowedLibraryRules("sdfsdf"), "error_in_request");
     }
 
     private LibraryRule createLibraryRule(String name, Boolean booleanValue, String stringValue) {

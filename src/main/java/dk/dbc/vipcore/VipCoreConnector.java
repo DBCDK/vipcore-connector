@@ -146,29 +146,25 @@ public abstract class VipCoreConnector {
         final Response.Status actualStatus =
                 Response.Status.fromStatusCode(response.getStatus());
         if (actualStatus != expectedStatus) {
-            try {
-                ErrorMessageDTO errorMessage = readResponseEntity(response, ErrorMessageDTO.class);
+            final ErrorMessageDTO errorMessage = readResponseEntity(response, ErrorMessageDTO.class);
 
-                switch (errorMessage.getError()) {
-                    case "authentication_error":
-                        throw new AuthenticationErrorException();
-                    case "service_unavailable":
-                        throw new ServiceUnavailableException();
-                    case "agency_not_found":
-                        throw new AgencyNotFoundException();
-                    case "error_in_request":
-                        throw new ErrorInRequestException();
-                    case "no_agencies_found":
-                        throw new NoAgenciesFoundException();
-                    case "no_userid_selected":
-                        throw new NoUserIdSelectedException();
-                    case "profile_not_found":
-                        throw new ProfileNotFoundException();
-                    default:
-                        throw new VipCoreException(errorMessage.getError());
-                }
-            } catch (Exception e) {
-                throw new VipCoreException(String.format("Got unexpected unhandled exception from VipCore with status %s", actualStatus.getStatusCode()));
+            switch (errorMessage.getError()) {
+                case "authentication_error":
+                    throw new AuthenticationErrorException();
+                case "service_unavailable":
+                    throw new ServiceUnavailableException();
+                case "agency_not_found":
+                    throw new AgencyNotFoundException();
+                case "error_in_request":
+                    throw new ErrorInRequestException();
+                case "no_agencies_found":
+                    throw new NoAgenciesFoundException();
+                case "no_userid_selected":
+                    throw new NoUserIdSelectedException();
+                case "profile_not_found":
+                    throw new ProfileNotFoundException();
+                default:
+                    throw new VipCoreException(errorMessage.getError());
             }
         }
     }
