@@ -1,7 +1,7 @@
 {
   "id" : "20b64a14-c842-3a43-90a5-600eac0628f2",
   "request" : {
-    "url" : "/libraryrules",
+    "url" : "/1.0/api/libraryrules",
     "method" : "POST",
     "bodyPatterns" : [ {
       "equalToJson" : "{\"libraryRule\":[{\"name\":\"cataloging_template_set\",\"string\":\"dbc\"}]}",

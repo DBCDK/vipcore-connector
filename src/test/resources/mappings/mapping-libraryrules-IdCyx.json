@@ -1,7 +1,7 @@
 {
   "id" : "c16c2fa1-9e0d-3ca7-99ee-4850357a5dac",
   "request" : {
-    "url" : "/libraryrules",
+    "url" : "/1.0/api/libraryrules",
     "method" : "POST",
     "bodyPatterns" : [ {
       "equalToJson" : "{\"agencyId\":\"010100\"}",

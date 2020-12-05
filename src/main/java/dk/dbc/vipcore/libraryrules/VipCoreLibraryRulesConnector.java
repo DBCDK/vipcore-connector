@@ -67,7 +67,7 @@ public class VipCoreLibraryRulesConnector extends VipCoreConnector {
         }
     }
 
-    private static final String LIBRARY_RULES_PATH = "libraryrules";
+    private static final String LIBRARY_RULES_PATH = "1.0/api/libraryrules";
 
     /**
      * Returns new instance with default retry policy

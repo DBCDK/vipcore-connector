@@ -1,7 +1,7 @@
 {
   "id" : "345b4a4c-c034-34e7-a244-c30d7916d1fe",
   "request" : {
-    "url" : "/libraryrules",
+    "url" : "/1.0/api/libraryrules",
     "method" : "POST",
     "bodyPatterns" : [ {
       "equalToJson" : "{\"libraryRule\":[{\"name\":\"cataloging_template_set\",\"string\":\"fbs\"}]}",

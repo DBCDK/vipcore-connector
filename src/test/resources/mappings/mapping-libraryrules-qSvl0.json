@@ -1,7 +1,7 @@
 {
   "id" : "288ae7eb-e418-3d3f-802e-cbb7beb9e86b",
   "request" : {
-    "url" : "/libraryrules",
+    "url" : "/1.0/api/libraryrules",
     "method" : "POST",
     "bodyPatterns" : [ {
       "equalToJson" : "{\"libraryRule\":[{\"name\":\"use_enrichments\",\"bool\":true}]}",
