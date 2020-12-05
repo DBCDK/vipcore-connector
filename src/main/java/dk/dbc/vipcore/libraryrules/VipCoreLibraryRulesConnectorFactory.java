@@ -6,6 +6,8 @@
 package dk.dbc.vipcore.libraryrules;
 
 import dk.dbc.httpclient.HttpClient;
+import dk.dbc.vipcore.VipCoreConnector;
+
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.jackson.JacksonFeature;
@@ -57,7 +59,7 @@ public class VipCoreLibraryRulesConnectorFactory {
         return new VipCoreLibraryRulesConnector(client, vipcoreServiceBaseUrl);
     }
 
-    public static VipCoreLibraryRulesConnector create(String vipcoreServiceBaseUrl, int cacheAge, VipCoreLibraryRulesConnector.TimingLogLevel level) {
+    public static VipCoreLibraryRulesConnector create(String vipcoreServiceBaseUrl, int cacheAge, VipCoreConnector.TimingLogLevel level) {
         final Client client = HttpClient.newClient(new ClientConfig()
                 .register(new JacksonFeature()));
         LOGGER.info("Creating VipCoreLibraryRulesConnector for: {}", vipcoreServiceBaseUrl);
@@ -70,7 +72,7 @@ public class VipCoreLibraryRulesConnectorFactory {
 
     @Inject
     @ConfigProperty(name = "VIPCORE_SERVICE_TIMING_LOG_LEVEL", defaultValue = "INFO")
-    private VipCoreLibraryRulesConnector.TimingLogLevel level;
+    private VipCoreConnector.TimingLogLevel level;
 
     @Inject
     @ConfigProperty(name = "VIPCORE_CACHE_AGE", defaultValue = "8")

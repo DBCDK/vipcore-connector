@@ -84,7 +84,13 @@ public class VipCoreLibraryRulesConnectorTest {
                 )
         ));
 
-        assertThat(connector.getAllowedLibraryRules("710100"), is(new HashSet<String>() {{
+        assertThat(connector.getAllowedLibraryRules("710100"), is(new HashSet<String>() {
+            /**
+            *
+            */
+            private static final long serialVersionUID = 177297076452796083L;
+
+            {
             add("auth_common_notes");
             add("auth_agency_common_record");
             add("use_localdata_stream");

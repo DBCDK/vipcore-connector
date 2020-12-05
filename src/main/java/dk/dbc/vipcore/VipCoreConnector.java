@@ -110,7 +110,7 @@ public abstract class VipCoreConnector {
         failSafeHttpClient.getClient().close();
     }
 
-    protected <S, T> T postRequest(String basePath,
+    protected <T> T postRequest(String basePath,
                                    String data,
                                    Class<T> type) throws VipCoreException {
         final Stopwatch stopwatch = new Stopwatch();
