@@ -8,6 +8,11 @@ package dk.dbc.vipcore.libraryrules;
 import dk.dbc.vipcore.exception.VipCoreException;
 
 public class VipCoreLibraryRulesConnectorException extends VipCoreException {
+    /**
+     *
+     */
+    private static final long serialVersionUID = 8337785542595875948L;
+
     public VipCoreLibraryRulesConnectorException(String message) {
         super(message);
     }

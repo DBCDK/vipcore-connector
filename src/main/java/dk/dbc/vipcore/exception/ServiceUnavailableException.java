@@ -7,6 +7,11 @@ package dk.dbc.vipcore.exception;
 
 public class ServiceUnavailableException extends VipCoreException {
 
+    /**
+     *
+     */
+    private static final long serialVersionUID = 6212049466598679047L;
+
     public ServiceUnavailableException() {
         super("service_unavailable");
     }

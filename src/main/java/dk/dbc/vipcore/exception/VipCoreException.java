@@ -6,6 +6,11 @@
 package dk.dbc.vipcore.exception;
 
 public class VipCoreException extends Exception {
+    /**
+     *
+     */
+    private static final long serialVersionUID = 868126125555959437L;
+
     public VipCoreException(String message) {
         super(message);
     }

@@ -7,6 +7,11 @@ package dk.dbc.vipcore.exception;
 
 public class ProfileNotFoundException extends VipCoreException {
 
+    /**
+     *
+     */
+    private static final long serialVersionUID = -2210120792555756098L;
+
     public ProfileNotFoundException() {
         super("profile_not_found");
     }

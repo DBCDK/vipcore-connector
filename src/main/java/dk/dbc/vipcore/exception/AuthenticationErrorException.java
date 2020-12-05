@@ -6,6 +6,11 @@
 package dk.dbc.vipcore.exception;
 
 public class AuthenticationErrorException extends VipCoreException {
+    /**
+     *
+     */
+    private static final long serialVersionUID = 4475500850148307809L;
+
     public AuthenticationErrorException() {
         super("authentication_error");
     }

@@ -7,6 +7,11 @@ package dk.dbc.vipcore.exception;
 
 public class AgencyNotFoundException extends VipCoreException {
 
+    /**
+     *
+     */
+    private static final long serialVersionUID = -5551623825951240784L;
+
     public AgencyNotFoundException() {
         super("agency_not_found");
     }

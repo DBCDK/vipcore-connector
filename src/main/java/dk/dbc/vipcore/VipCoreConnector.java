@@ -47,7 +47,7 @@ public abstract class VipCoreConnector {
      * @param httpClient web resources client
      * @param baseUrl    base URL for vipcore service endpoint
      */
-    public VipCoreConnector(Client httpClient, String baseUrl) {
+    protected VipCoreConnector(Client httpClient, String baseUrl) {
         this(FailSafeHttpClient.create(httpClient, RETRY_POLICY), baseUrl, TimingLogLevel.INFO);
     }
 
@@ -58,7 +58,7 @@ public abstract class VipCoreConnector {
      * @param baseUrl    base URL for vipcore service endpoint
      * @param level      timings log level
      */
-    public VipCoreConnector(Client httpClient, String baseUrl, TimingLogLevel level) {
+    protected VipCoreConnector(Client httpClient, String baseUrl, TimingLogLevel level) {
         this(FailSafeHttpClient.create(httpClient, RETRY_POLICY), baseUrl, level);
     }
 
@@ -68,7 +68,7 @@ public abstract class VipCoreConnector {
      * @param failSafeHttpClient web resources client with custom retry policy
      * @param baseUrl            base URL for vipcore service endpoint
      */
-    public VipCoreConnector(FailSafeHttpClient failSafeHttpClient, String baseUrl) {
+    protected VipCoreConnector(FailSafeHttpClient failSafeHttpClient, String baseUrl) {
         this(failSafeHttpClient, baseUrl, TimingLogLevel.INFO);
     }
 
@@ -79,7 +79,7 @@ public abstract class VipCoreConnector {
      * @param baseUrl            base URL for vipcore service endpoint
      * @param level              timings log level
      */
-    public VipCoreConnector(FailSafeHttpClient failSafeHttpClient, String baseUrl, TimingLogLevel level) {
+    protected VipCoreConnector(FailSafeHttpClient failSafeHttpClient, String baseUrl, TimingLogLevel level) {
         this.failSafeHttpClient = InvariantUtil.checkNotNullOrThrow(
                 failSafeHttpClient, "failSafeHttpClient");
         this.baseUrl = InvariantUtil.checkNotNullNotEmptyOrThrow(
