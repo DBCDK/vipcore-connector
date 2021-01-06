@@ -297,9 +297,15 @@ public class VipCoreLibraryRulesConnectorTest {
     }
 
     @Test
-    void testForErrors() {
+    void getAllowedLibraryRules_testForErrors() {
         Assertions.assertThrows(AgencyNotFoundException.class, () -> connector.getAllowedLibraryRules("000000"), "agency_not_found");
         Assertions.assertThrows(ErrorInRequestException.class, () -> connector.getAllowedLibraryRules("sdfsdf"), "error_in_request");
+    }
+
+    @Test
+    void getLibraryRulesByAgencyId_testForErrors() {
+        Assertions.assertThrows(AgencyNotFoundException.class, () -> connector.getLibraryRulesByAgencyId("000000"), "agency_not_found");
+        Assertions.assertThrows(ErrorInRequestException.class, () -> connector.getLibraryRulesByAgencyId("sdfsdf"), "error_in_request");
     }
 
     private LibraryRule createLibraryRule(String name, Boolean booleanValue, String stringValue) {

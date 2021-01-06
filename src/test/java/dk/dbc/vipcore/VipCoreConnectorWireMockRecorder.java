@@ -36,6 +36,7 @@ public class VipCoreConnectorWireMockRecorder {
         connectorTest.getLibraryRulesByAgencyIdTest();
         connectorTest.getLibrariesByLibraryRuleBooleanTest();
         connectorTest.getLibrariesByLibraryRuleStringTest();
-        connectorTest.testForErrors();
+        connectorTest.getAllowedLibraryRules_testForErrors();
+        connectorTest.getLibraryRulesByAgencyId_testForErrors();
     }
 }
