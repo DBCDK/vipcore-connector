@@ -12,6 +12,7 @@ import dk.dbc.vipcore.exception.ErrorInRequestException;
 import dk.dbc.vipcore.exception.VipCoreException;
 import dk.dbc.vipcore.libraryrules.VipCoreLibraryRulesConnector;
 import dk.dbc.vipcore.marshallers.LibraryRule;
+import dk.dbc.vipcore.marshallers.LibraryRules;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.junit.jupiter.api.AfterAll;
@@ -86,25 +87,26 @@ public class VipCoreLibraryRulesConnectorTest {
 
         assertThat(connector.getAllowedLibraryRules("710100"), is(new HashSet<String>() {
             /**
-            *
-            */
+             *
+             */
             private static final long serialVersionUID = 177297076452796083L;
 
             {
-            add("auth_common_notes");
-            add("auth_agency_common_record");
-            add("use_localdata_stream");
-            add("create_enrichments");
-            add("use_enrichments");
-            add("use_central_faust");
-            add("auth_public_lib_common_record");
-            add("use_holdings_item");
-            add("auth_common_subjects");
-            add("auth_export_holdings");
-            add("auth_ret_record");
-            add("auth_create_common_record");
-            add("auth_add_dk5_to_phd");
-        }}));
+                add("auth_common_notes");
+                add("auth_agency_common_record");
+                add("use_localdata_stream");
+                add("create_enrichments");
+                add("use_enrichments");
+                add("use_central_faust");
+                add("auth_public_lib_common_record");
+                add("use_holdings_item");
+                add("auth_common_subjects");
+                add("auth_export_holdings");
+                add("auth_ret_record");
+                add("auth_create_common_record");
+                add("auth_add_dk5_to_phd");
+            }
+        }));
     }
 
     @Test
@@ -134,7 +136,11 @@ public class VipCoreLibraryRulesConnectorTest {
         expectedLibraryRuleList010100.add(createLibraryRule("view_metacompass", false, null));
         expectedLibraryRuleList010100.add(createLibraryRule("use_central_faust", true, null));
 
-        assertThat(connector.getLibraryRulesByAgencyId("010100"), is(expectedLibraryRuleList010100));
+        final LibraryRules expectedLibraryRules010100 = new LibraryRules();
+        expectedLibraryRules010100.setLibraryRule(expectedLibraryRuleList010100);
+        expectedLibraryRules010100.setAgencyId("010100");
+
+        assertThat(connector.getLibraryRulesByAgencyId("010100"), is(expectedLibraryRules010100));
 
         final List<LibraryRule> expectedLibraryRuleList710100 = new ArrayList<>();
         expectedLibraryRuleList710100.add(createLibraryRule("create_enrichments", true, null));
@@ -161,7 +167,12 @@ public class VipCoreLibraryRulesConnectorTest {
         expectedLibraryRuleList710100.add(createLibraryRule("view_metacompass", false, null));
         expectedLibraryRuleList710100.add(createLibraryRule("use_central_faust", true, null));
 
-        assertThat(connector.getLibraryRulesByAgencyId("710100"), is(expectedLibraryRuleList710100));
+        final LibraryRules expectedLibraryRules710100 = new LibraryRules();
+        expectedLibraryRules710100.setLibraryRule(expectedLibraryRuleList710100);
+        expectedLibraryRules710100.setAgencyId("710100");
+        expectedLibraryRules710100.setAgencyType("Folkebibliotek");
+
+        assertThat(connector.getLibraryRulesByAgencyId("710100"), is(expectedLibraryRules710100));
     }
 
     @Test

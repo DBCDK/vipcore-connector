@@ -29,7 +29,7 @@ public class VipCoreLibraryRulesConnector extends VipCoreConnector {
 
     private static final int MAX_CACHE_AGE = 8;
     private final PassiveExpiringMap<String, Set<String>> libraryRuleCache;
-    private final PassiveExpiringMap<String, List<LibraryRule>> libraryRulesByAgencyIdCache;
+    private final PassiveExpiringMap<String, LibraryRules> libraryRulesByAgencyIdCache;
 
     public enum Rule {
         CREATE_ENRICHMENTS("create_enrichments"),
@@ -129,7 +129,7 @@ public class VipCoreLibraryRulesConnector extends VipCoreConnector {
     }
 
     public boolean hasFeature(String agencyId, Rule feature) throws VipCoreException {
-        final List<LibraryRule> libraryRules = getLibraryRulesByAgencyId(agencyId);
+        final List<LibraryRule> libraryRules = postLibraryRulesRequest(agencyId, null).getLibraryRule();
 
         return libraryRules.stream()
                 .anyMatch(libraryRule ->
@@ -144,7 +144,7 @@ public class VipCoreLibraryRulesConnector extends VipCoreConnector {
     }
 
     public Set<String> getAllowedLibraryRules(String agencyId, String trackingId) throws VipCoreException {
-        final List<LibraryRule> libraryRules = getLibraryRulesByAgencyId(agencyId, trackingId);
+        final List<LibraryRule> libraryRules = postLibraryRulesRequest(agencyId, trackingId).getLibraryRule();
 
         return libraryRules.stream()
                 .filter(libraryRule -> libraryRule.getBool() != null && libraryRule.getBool())
@@ -152,35 +152,12 @@ public class VipCoreLibraryRulesConnector extends VipCoreConnector {
                 .collect(Collectors.toSet());
     }
 
-    public List<LibraryRule> getLibraryRulesByAgencyId(String agencyId) throws VipCoreException {
-        return getLibraryRulesByAgencyId(agencyId, null);
+    public LibraryRules getLibraryRulesByAgencyId(String agencyId) throws VipCoreException {
+        return postLibraryRulesRequest(agencyId, null);
     }
 
-    public List<LibraryRule> getLibraryRulesByAgencyId(String agencyId, String trackingId) throws VipCoreException {
-        try {
-            final List<LibraryRule> cacheValue = libraryRulesByAgencyIdCache.get(agencyId);
-            if (cacheValue != null) {
-                return cacheValue;
-            } else {
-                final LibraryRulesRequest libraryRulesRequest = new LibraryRulesRequest();
-                libraryRulesRequest.setAgencyId(agencyId);
-                if (trackingId != null) {
-                    libraryRulesRequest.setTrackingId(trackingId);
-                }
-
-                final LibraryRulesResponse libraryRulesResponse = postRequest(LIBRARY_RULES_PATH, jsonbContext.marshall(libraryRulesRequest), LibraryRulesResponse.class);
-                for (LibraryRules libraryRules : libraryRulesResponse.getLibraryRules()) {
-                    if (agencyId.equals(libraryRules.getAgencyId())) {
-                        libraryRulesByAgencyIdCache.put(agencyId, libraryRules.getLibraryRule());
-                        return libraryRules.getLibraryRule();
-                    }
-                }
-
-                throw new VipCoreLibraryRulesConnectorException(String.format("Could not find LibraryRules for agencyId %s", agencyId));
-            }
-        } catch (JSONBException e) {
-            throw new VipCoreLibraryRulesConnectorException("Caught unexpected JSONBException", e);
-        }
+    public LibraryRules getLibraryRulesByAgencyId(String agencyId, String trackingId) throws VipCoreException {
+        return postLibraryRulesRequest(agencyId, trackingId);
     }
 
     public Set<String> getLibrariesByLibraryRule(Rule rule, String value) throws VipCoreException {
@@ -198,12 +175,40 @@ public class VipCoreLibraryRulesConnector extends VipCoreConnector {
     public Set<String> getLibrariesByLibraryRule(Rule rule, boolean value) throws VipCoreException {
         return getLibrariesByLibraryRule(rule, value, null);
     }
+
     public Set<String> getLibrariesByLibraryRule(Rule rule, boolean value, String trackingId) throws VipCoreException {
         final LibraryRule libraryRule = new LibraryRule();
         libraryRule.setName(rule.getValue());
         libraryRule.setBool(value);
 
         return postLibraryRulesRequest(libraryRule, trackingId);
+    }
+
+    private LibraryRules postLibraryRulesRequest(String agencyId, String trackingId) throws VipCoreException {
+        try {
+            final LibraryRules cacheValue = libraryRulesByAgencyIdCache.get(agencyId);
+            if (cacheValue != null) {
+                return cacheValue;
+            } else {
+                final LibraryRulesRequest libraryRulesRequest = new LibraryRulesRequest();
+                libraryRulesRequest.setAgencyId(agencyId);
+                if (trackingId != null) {
+                    libraryRulesRequest.setTrackingId(trackingId);
+                }
+
+                final LibraryRulesResponse libraryRulesResponse = postRequest(LIBRARY_RULES_PATH, jsonbContext.marshall(libraryRulesRequest), LibraryRulesResponse.class);
+                for (LibraryRules libraryRules : libraryRulesResponse.getLibraryRules()) {
+                    if (agencyId.equals(libraryRules.getAgencyId())) {
+                        libraryRulesByAgencyIdCache.put(agencyId, libraryRules);
+                        return libraryRules;
+                    }
+                }
+
+                throw new VipCoreLibraryRulesConnectorException(String.format("Could not find LibraryRules for agencyId %s", agencyId));
+            }
+        } catch (JSONBException e) {
+            throw new VipCoreLibraryRulesConnectorException("Caught unexpected JSONBException", e);
+        }
     }
 
     private Set<String> postLibraryRulesRequest(LibraryRule libraryRule, String trackingId) throws VipCoreException {
