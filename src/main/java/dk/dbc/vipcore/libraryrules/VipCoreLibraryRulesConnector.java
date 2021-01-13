@@ -50,7 +50,8 @@ public class VipCoreLibraryRulesConnector extends VipCoreConnector {
         AUTH_ADD_DK5_TO_PHD_ALLOWED("auth_create_common_record"),
         AUTH_METACOMPASS("auth_metacompass"),
         CATALOGING_TEMPLATE_SET("cataloging_template_set"),
-        IMS_LIBRARY("ims_library");
+        IMS_LIBRARY("ims_library"),
+        WORLDCAT_SYNCHRONIZE("worldcat_synchronize");
 
         private final String value;
 
