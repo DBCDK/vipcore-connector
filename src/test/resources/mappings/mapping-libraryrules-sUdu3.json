@@ -1,0 +1,22 @@
+{
+  "id" : "4b3c6687-d736-37ac-9edb-af6b8451cc45",
+  "request" : {
+    "url" : "/1.0/api/libraryrules",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"libraryRule\":[{\"name\":\"ims_library\",\"bool\":true}]}",
+      "ignoreArrayOrder" : true,
+      "ignoreExtraElements" : true
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-libraryrules-sUdu3.json",
+    "headers" : {
+      "Server" : "Payara Micro #badassfish",
+      "Content-Type" : "application/json",
+      "X-Frame-Options" : "SAMEORIGIN"
+    }
+  },
+  "uuid" : "4b3c6687-d736-37ac-9edb-af6b8451cc45"
+}

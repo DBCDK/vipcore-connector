@@ -13,6 +13,7 @@ import dk.dbc.vipcore.exception.VipCoreException;
 import dk.dbc.vipcore.libraryrules.VipCoreLibraryRulesConnector;
 import dk.dbc.vipcore.marshallers.LibraryRule;
 import dk.dbc.vipcore.marshallers.LibraryRules;
+import dk.dbc.vipcore.marshallers.LibraryRulesRequest;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.junit.jupiter.api.AfterAll;
@@ -176,73 +177,49 @@ public class VipCoreLibraryRulesConnectorTest {
     }
 
     @Test
-    void getLibrariesByLibraryRuleBooleanTest() throws VipCoreException {
-        assertThat(connector.getLibrariesByLibraryRule(VipCoreLibraryRulesConnector.Rule.USE_ENRICHMENTS, true), is(new HashSet<>(
-                Arrays.asList(
-                        "561884", "516950", "562739", "563949", "133030", "131090", "581000", "860960", "133150",
-                        "556160", "562980", "510164", "560683", "510165", "753000", "510167", "563715", "948200",
-                        "500002", "500243", "861700", "133160", "546120", "133040", "562992", "510073", "515766",
-                        "562994", "563962", "546107", "777300", "725900", "503302", "871890", "503301", "500031",
-                        "503304", "503303", "500278", "503300", "133170", "133050", "792615", "562882", "861970",
-                        "582130", "900006", "831260", "900004", "562764", "900003", "562525", "561437", "747900",
-                        "872960", "741000", "575712", "133180", "515988", "133060", "547310", "861720", "133100",
-                        "775100", "571520", "740000", "500296", "550540", "526566", "763000", "131170", "133110",
-                        "131050", "774000", "503309", "562944", "871930", "503306", "501007", "503305", "503308",
-                        "510083", "784900", "503307", "546160", "718300", "766500", "721700", "503311", "503310",
-                        "131060", "131180", "133120", "860810", "733600", "131070", "133130", "131190", "133010",
-                        "546153", "732600", "751000", "782500", "774100", "778700", "546140", "739000", "502005",
-                        "574700", "500068", "133140", "133020", "131080", "779100", "756100", "721000", "682105",
-                        "523530", "744000", "500650", "772700", "861430", "562903", "533100", "522330", "710100",
-                        "714700", "733000", "737600", "861560", "861680", "514710", "533310", "760700", "874400",
-                        "500790", "767100", "500794", "500430", "500793", "300185", "715700", "514702", "732000",
-                        "300183", "300187", "561950", "757300", "536710", "755000", "618799", "572720", "533320",
-                        "874500", "874510", "526910", "300190", "581310", "716900", "568110", "300159", "515940",
-                        "300157", "754000", "872630", "133190", "786000", "500455", "719000", "300163", "300161",
-                        "133070", "300167", "510129", "770600", "300165", "538951", "300169", "575180", "720100",
-                        "133080", "743000", "766100", "300173", "545110", "300175", "300259", "632904", "617314",
-                        "133090", "742000", "559977", "300260", "715900", "300265", "770700", "000300", "300269",
-                        "776000", "300147", "757500", "510144", "944500", "726900", "500698", "533120", "722300",
-                        "870110", "300390", "556699", "300151", "300270", "300155", "300153", "791615", "300479",
-                        "748200", "758000", "500804", "521990", "300360", "774600", "782000", "300240", "300482",
-                        "300480", "517355", "874450", "300250", "300492", "300370", "300376", "300253", "300336",
-                        "300575", "300219", "131300", "300217", "517380", "532610", "874240", "300580", "300101",
-                        "715300", "300340", "300461", "300223", "724000", "861170", "761500", "550164", "575158",
-                        "735000", "300350", "300230", "716500", "861340", "861580", "300316", "536920", "860490",
-                        "530022", "746100", "530023", "530020", "530021", "530019", "530015", "734000", "547940",
-                        "300320", "300563", "300440", "300561", "561176", "300201", "300329", "300326", "861590",
-                        "534510", "575101", "873200", "530028", "874530", "530026", "521320", "530027", "530024",
-                        "530025", "300210", "300573", "300450", "300330", "300410", "300773", "300411", "300779",
-                        "547913", "563006", "300657", "547910", "563129", "725300", "723000", "575112", "552148",
-                        "552147", "874320", "575105", "556623", "874560", "784000", "521530", "561190", "300540",
-                        "300661", "561073", "300420", "715500", "300665", "300787", "300306", "745000", "726500",
-                        "873220", "785100", "500981", "507015", "543310", "300430", "716700", "300791", "300550",
-                        "300671", "731600", "300630", "300751", "131120", "300510", "773000", "781300", "133300",
-                        "300756", "717300", "503000", "131130", "300760", "726000", "131010", "300400", "300766",
-                        "521911", "718500", "573120", "721900", "551540", "762100", "131020", "131140", "300530",
-                        "727000", "543910", "300730", "300851", "133200", "300615", "530710", "573130", "585107",
-                        "776600", "875170", "562482", "131030", "300860", "585104", "131150", "585101", "562120",
-                        "300621", "300740", "300741", "300746", "784600", "537360", "765700", "503015", "716100",
-                        "546180", "615718", "502041", "131040", "563221", "131160", "565760", "131200", "300710",
-                        "748000", "725000", "551000", "550022", "616916", "717500", "300840", "562663", "732900",
-                        "679308", "300846", "562786", "643111", "300607", "300849", "300727", "531510", "737000",
-                        "777900", "775600", "300970", "586620", "718700", "566910", "131100", "562672", "300813",
-                        "300810", "565701", "781000", "771000", "520950", "520710", "715100", "505004", "736000",
-                        "505002", "554600", "875370", "730600", "541523", "300820", "562562", "131110", "749200",
-                        "300706", "300707", "300825", "521930", "716300")
+    void getLibrariesTest() throws VipCoreException {
+        final LibraryRulesRequest libraryRulesRequest = new LibraryRulesRequest();
+
+        final LibraryRule libraryRuleIms = new LibraryRule();
+        libraryRuleIms.setName(VipCoreLibraryRulesConnector.Rule.IMS_LIBRARY.getValue());
+        libraryRuleIms.setBool(true);
+
+        libraryRulesRequest.setLibraryRule(Collections.singletonList(libraryRuleIms));
+
+        assertThat(connector.getLibraries(libraryRulesRequest), is(new HashSet<>(
+                Collections.singletonList("775100")
         )));
 
-        assertThat(connector.getLibrariesByLibraryRule(VipCoreLibraryRulesConnector.Rule.AUTH_ROOT, true), is(new HashSet<>(
+        final LibraryRule libraryRuleAuthRoot = new LibraryRule();
+        libraryRuleAuthRoot.setName(VipCoreLibraryRulesConnector.Rule.AUTH_ROOT.getValue());
+        libraryRuleAuthRoot.setBool(true);
+
+        libraryRulesRequest.setLibraryRule(Collections.singletonList(libraryRuleAuthRoot));
+
+        assertThat(connector.getLibraries(libraryRulesRequest), is(new HashSet<>(
                 Collections.singletonList("010100")
         )));
     }
 
     @Test
-    void getLibrariesByLibraryRuleStringTest() throws VipCoreException {
-        assertThat(connector.getLibrariesByLibraryRule(VipCoreLibraryRulesConnector.Rule.CATALOGING_TEMPLATE_SET, "dbc"), is(new HashSet<>(
+    void getLibrariesCatalogingTemplateSetTest() throws VipCoreException {
+        final LibraryRulesRequest libraryRulesRequest = new LibraryRulesRequest();
+
+        final LibraryRule catalogingTemplateSetDBS = new LibraryRule();
+        catalogingTemplateSetDBS.setName(VipCoreLibraryRulesConnector.Rule.CATALOGING_TEMPLATE_SET.getValue());
+        catalogingTemplateSetDBS.setString("dbc");
+        libraryRulesRequest.setLibraryRule(Collections.singletonList(catalogingTemplateSetDBS));
+
+        assertThat(connector.getLibraries(libraryRulesRequest), is(new HashSet<>(
                 Collections.singletonList("010100")
         )));
 
-        assertThat(connector.getLibrariesByLibraryRule(VipCoreLibraryRulesConnector.Rule.CATALOGING_TEMPLATE_SET, "fbs"), is(new HashSet<>(
+        final LibraryRule catalogingTemplateSetFBS = new LibraryRule();
+        catalogingTemplateSetFBS.setName(VipCoreLibraryRulesConnector.Rule.CATALOGING_TEMPLATE_SET.getValue());
+        catalogingTemplateSetFBS.setString("fbs");
+        libraryRulesRequest.setLibraryRule(Collections.singletonList(catalogingTemplateSetFBS));
+
+        assertThat(connector.getLibraries(libraryRulesRequest), is(new HashSet<>(
                 Arrays.asList(
                         "561884", "516950", "871740", "562739", "563949", "133030", "131090", "581000", "860960",
                         "133150", "556160", "562980", "510164", "560683", "510165", "753000", "510167", "563715",
@@ -302,10 +279,35 @@ public class VipCoreLibraryRulesConnectorTest {
                 )
         )));
 
-        assertThat(connector.getLibrariesByLibraryRule(VipCoreLibraryRulesConnector.Rule.CATALOGING_TEMPLATE_SET, "julemanden"), is(new HashSet<>(
+        final LibraryRule catalogingTemplateSetJulemanden = new LibraryRule();
+        catalogingTemplateSetJulemanden.setName(VipCoreLibraryRulesConnector.Rule.CATALOGING_TEMPLATE_SET.getValue());
+        catalogingTemplateSetJulemanden.setString("julemanden");
+        libraryRulesRequest.setLibraryRule(Collections.singletonList(catalogingTemplateSetJulemanden));
+
+        assertThat(connector.getLibraries(libraryRulesRequest), is(new HashSet<>(
                 Collections.emptyList()
         )));
     }
+
+    @Test
+    void getLibrariesCombinesRulesTest() throws VipCoreException {
+        final LibraryRulesRequest libraryRulesRequest = new LibraryRulesRequest();
+
+        final LibraryRule libraryRuleIms = new LibraryRule();
+        libraryRuleIms.setName(VipCoreLibraryRulesConnector.Rule.IMS_LIBRARY.getValue());
+        libraryRuleIms.setBool(true);
+
+        final LibraryRule libraryRuleCreateEnrichments = new LibraryRule();
+        libraryRuleCreateEnrichments.setName(VipCoreLibraryRulesConnector.Rule.CREATE_ENRICHMENTS.getValue());
+        libraryRuleCreateEnrichments.setBool(true);
+
+        libraryRulesRequest.setLibraryRule(Arrays.asList(libraryRuleIms, libraryRuleCreateEnrichments));
+
+        assertThat(connector.getLibraries(libraryRulesRequest), is(new HashSet<>(
+                Collections.singletonList("775100")
+        )));
+    }
+
 
     @Test
     void getAllowedLibraryRules_testForErrors() {

@@ -161,30 +161,6 @@ public class VipCoreLibraryRulesConnector extends VipCoreConnector {
         return postLibraryRulesRequest(agencyId, trackingId);
     }
 
-    public Set<String> getLibrariesByLibraryRule(Rule rule, String value) throws VipCoreException {
-        return getLibrariesByLibraryRule(rule, value, null);
-    }
-
-    public Set<String> getLibrariesByLibraryRule(Rule rule, String value, String trackingId) throws VipCoreException {
-        final LibraryRule libraryRule = new LibraryRule();
-        libraryRule.setName(rule.getValue());
-        libraryRule.setString(value);
-
-        return postLibraryRulesRequest(libraryRule, trackingId);
-    }
-
-    public Set<String> getLibrariesByLibraryRule(Rule rule, boolean value) throws VipCoreException {
-        return getLibrariesByLibraryRule(rule, value, null);
-    }
-
-    public Set<String> getLibrariesByLibraryRule(Rule rule, boolean value, String trackingId) throws VipCoreException {
-        final LibraryRule libraryRule = new LibraryRule();
-        libraryRule.setName(rule.getValue());
-        libraryRule.setBool(value);
-
-        return postLibraryRulesRequest(libraryRule, trackingId);
-    }
-
     private LibraryRules postLibraryRulesRequest(String agencyId, String trackingId) throws VipCoreException {
         try {
             final LibraryRules cacheValue = libraryRulesByAgencyIdCache.get(agencyId);
@@ -212,20 +188,13 @@ public class VipCoreLibraryRulesConnector extends VipCoreConnector {
         }
     }
 
-    private Set<String> postLibraryRulesRequest(LibraryRule libraryRule, String trackingId) throws VipCoreException {
+    public Set<String> getLibraries(LibraryRulesRequest libraryRulesRequest) throws VipCoreException {
         Set<String> result;
         try {
-            final String libraryRuleCacheKey = createLibraryRuleCacheKey(libraryRule);
+            final String libraryRuleCacheKey = createLibraryRuleCacheKey(libraryRulesRequest);
             result = libraryRuleCache.get(libraryRuleCacheKey);
             if (result != null) {
                 return result;
-            }
-
-            final List<LibraryRule> libraryRuleList = Collections.singletonList(libraryRule);
-            final LibraryRulesRequest libraryRulesRequest = new LibraryRulesRequest();
-            libraryRulesRequest.setLibraryRule(libraryRuleList);
-            if (trackingId != null) {
-                libraryRulesRequest.setTrackingId(trackingId);
             }
 
             final LibraryRulesResponse libraryRulesResponse = postRequest(LIBRARY_RULES_PATH, jsonbContext.marshall(libraryRulesRequest), LibraryRulesResponse.class);
@@ -247,15 +216,17 @@ public class VipCoreLibraryRulesConnector extends VipCoreConnector {
         }
     }
 
-    private String createLibraryRuleCacheKey(LibraryRule libraryRule) {
+    private String createLibraryRuleCacheKey(LibraryRulesRequest libraryRulesRequest) {
         StringBuilder stringBuilder = new StringBuilder();
 
-        stringBuilder.append(libraryRule.getName().toUpperCase());
-        stringBuilder.append("_");
-        if (libraryRule.getBool() != null) {
-            stringBuilder.append(libraryRule.getBool().toString().toUpperCase());
-        } else {
-            stringBuilder.append(libraryRule.getString().toUpperCase());
+        for (LibraryRule libraryRule : libraryRulesRequest.getLibraryRule()) {
+            stringBuilder.append(libraryRule.getName().toUpperCase());
+            stringBuilder.append("_");
+            if (libraryRule.getBool() != null) {
+                stringBuilder.append(libraryRule.getBool().toString().toUpperCase());
+            } else {
+                stringBuilder.append(libraryRule.getString().toUpperCase());
+            }
         }
 
         return stringBuilder.toString();
