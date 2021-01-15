@@ -1,0 +1,22 @@
+{
+  "id" : "91e04172-24d0-37ce-a8ad-3c2838b444b0",
+  "request" : {
+    "url" : "/1.0/api/libraryrules",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"libraryRule\":[{\"name\":\"ims_library\",\"bool\":true},{\"name\":\"create_enrichments\",\"bool\":true}]}",
+      "ignoreArrayOrder" : true,
+      "ignoreExtraElements" : true
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-libraryrules-ANsw1.json",
+    "headers" : {
+      "Server" : "Payara Micro #badassfish",
+      "Content-Type" : "application/json",
+      "X-Frame-Options" : "SAMEORIGIN"
+    }
+  },
+  "uuid" : "91e04172-24d0-37ce-a8ad-3c2838b444b0"
+}
