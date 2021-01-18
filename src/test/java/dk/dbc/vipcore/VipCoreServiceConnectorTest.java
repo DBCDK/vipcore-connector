@@ -2,11 +2,9 @@ package dk.dbc.vipcore;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import dk.dbc.httpclient.HttpClient;
-import dk.dbc.vipcore.VipCoreConnector;
 import dk.dbc.vipcore.exception.AgencyNotFoundException;
 import dk.dbc.vipcore.exception.ErrorInRequestException;
 import dk.dbc.vipcore.exception.VipCoreException;
-import dk.dbc.vipcore.libraryrules.VipCoreLibraryRulesConnector;
 import dk.dbc.vipcore.marshallers.BranchName;
 import dk.dbc.vipcore.marshallers.Information;
 import dk.dbc.vipcore.service.VipCoreServiceConnector;
