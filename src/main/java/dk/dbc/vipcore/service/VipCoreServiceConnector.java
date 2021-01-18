@@ -16,16 +16,17 @@ import dk.dbc.vipcore.marshallers.ServiceResponse;
 import org.apache.commons.collections4.map.PassiveExpiringMap;
 
 import javax.ws.rs.client.Client;
-import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public class VipCoreServiceConnector extends VipCoreConnector {
     private static final JSONBContext jsonbContext = new JSONBContext();
 
     private static final int MAX_CACHE_AGE = 8;
-    private final PassiveExpiringMap<String, Set<String>> serviceCache;
+    private final PassiveExpiringMap<String, Information> serviceCache;
 
     private static final String SERVICE_PATH = "1.0/api/service";
+
+    private static final String SERVICE_TYPE_INFORMATION = "information";
 
     /**
      * Returns new instance with default retry policy
@@ -82,21 +83,31 @@ public class VipCoreServiceConnector extends VipCoreConnector {
     }
 
     public Information getInformation(String agencyId, String trackingId) throws VipCoreException {
-        ServiceRequest serviceRequest = new ServiceRequest();
-        serviceRequest.setService("information");
-        serviceRequest.setAgencyId(agencyId);
-        if (trackingId != null) {
-            serviceRequest.setTrackingId(trackingId);
-        }
-
         try {
-            ServiceResponse serviceResponse = postRequest(SERVICE_PATH, jsonbContext.marshall(serviceRequest), ServiceResponse.class);
+            final String cacheKey = generateCacheKey(SERVICE_TYPE_INFORMATION, agencyId);
+            final Information cacheValue = serviceCache.get(cacheKey);
+            if (cacheValue != null) {
+                return cacheValue;
+            } else {
+                final ServiceRequest serviceRequest = new ServiceRequest();
+                serviceRequest.setService(SERVICE_TYPE_INFORMATION);
+                serviceRequest.setAgencyId(agencyId);
+                if (trackingId != null) {
+                    serviceRequest.setTrackingId(trackingId);
+                }
 
-            return serviceResponse.getInformation();
+                final ServiceResponse serviceResponse = postRequest(SERVICE_PATH, jsonbContext.marshall(serviceRequest), ServiceResponse.class);
+                serviceCache.put(cacheKey, serviceResponse.getInformation());
+
+                return serviceResponse.getInformation();
+            }
         } catch (JSONBException e) {
             throw new VipCoreServiceConnectorException("Caught unexpected JSONBException", e);
         }
     }
 
+    private String generateCacheKey(String serviceType, String agencyId) {
+        return String.format("%s_%s", serviceType, agencyId);
+    }
 
 }
