@@ -1,0 +1,22 @@
+{
+  "id" : "2cc9b30a-ec42-3bab-b618-7781e8bdf97b",
+  "request" : {
+    "url" : "/1.0/api/service",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"agencyId\":\"\",\"service\":\"information\"}",
+      "ignoreArrayOrder" : true,
+      "ignoreExtraElements" : true
+    } ]
+  },
+  "response" : {
+    "status" : 400,
+    "bodyFileName" : "body-service-aLMWx.json",
+    "headers" : {
+      "Server" : "Payara Micro #badassfish",
+      "Content-Type" : "application/json",
+      "X-Frame-Options" : "SAMEORIGIN"
+    }
+  },
+  "uuid" : "2cc9b30a-ec42-3bab-b618-7781e8bdf97b"
+}
