@@ -1,0 +1,22 @@
+{
+  "id" : "193fe4c6-15e4-3589-a4f7-10de738b0a5a",
+  "request" : {
+    "url" : "/1.0/api/service",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"agencyId\":\"000000\",\"service\":\"information\"}",
+      "ignoreArrayOrder" : true,
+      "ignoreExtraElements" : true
+    } ]
+  },
+  "response" : {
+    "status" : 404,
+    "bodyFileName" : "body-service-wwVwq.json",
+    "headers" : {
+      "Server" : "Payara Micro #badassfish",
+      "Content-Type" : "application/json",
+      "X-Frame-Options" : "SAMEORIGIN"
+    }
+  },
+  "uuid" : "193fe4c6-15e4-3589-a4f7-10de738b0a5a"
+}
