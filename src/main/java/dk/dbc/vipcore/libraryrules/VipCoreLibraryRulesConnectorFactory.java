@@ -43,7 +43,7 @@ import javax.ws.rs.client.Client;
  * <p>
  * CDI case depends on the vipcore service baseurl being defined as
  * the value of either a system property or environment variable
- * named VIPCORE_SERVICE_URL. VIPCORE_SERVICE_TIMING_LOG_LEVEL
+ * named VIPCORE_ENDPOINT. VIPCORE_SERVICE_TIMING_LOG_LEVEL
  * should be one of TRACE, DEBUG, INFO(default), WARN or ERROR, for setting
  * log level
  * </p>

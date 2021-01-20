@@ -15,10 +15,39 @@ import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
+import javax.enterprise.context.ApplicationScoped;
 import javax.enterprise.inject.Produces;
 import javax.inject.Inject;
 import javax.ws.rs.client.Client;
 
+/**
+ * VipCoreServiceConnector factory
+ * <p>
+ * Synopsis:
+ * </p>
+ * <pre>
+ *    // New instance
+ *    VipCoreServiceConnector connector = VipCoreServiceConnectorFactory.create("http://vip-core");
+ *
+ *    // Singleton instance in CDI enabled environment
+ *    {@literal @}Inject
+ *    VipCoreServiceConnectorFactory factory;
+ *    ...
+ *    VipCoreServiceConnector connector = factory.getInstance();
+ *
+ *    // or simply
+ *    {@literal @}Inject
+ *    VipCoreServiceConnector connector;
+ * </pre>
+ * <p>
+ * CDI case depends on the vipcore service baseurl being defined as
+ * the value of either a system property or environment variable
+ * named VIPCORE_ENDPOINT. VIPCORE_SERVICE_TIMING_LOG_LEVEL
+ * should be one of TRACE, DEBUG, INFO(default), WARN or ERROR, for setting
+ * log level
+ * </p>
+ */
+@ApplicationScoped
 public class VipCoreServiceConnectorFactory {
     private static final Logger LOGGER = LoggerFactory.getLogger(VipCoreServiceConnectorFactory.class);
 
