@@ -17,7 +17,6 @@ import dk.dbc.vipcore.marshallers.LibraryRulesResponse;
 import org.apache.commons.collections4.map.PassiveExpiringMap;
 
 import javax.ws.rs.client.Client;
-import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
