@@ -6,7 +6,7 @@ In pom.xml add this dependency:
 
     <groupId>dk.dbc</groupId>
     <artifactId>vipcore-connector</artifactId>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.3-SNAPSHOT</version>
 
 In your EJB add the following inject:
 
