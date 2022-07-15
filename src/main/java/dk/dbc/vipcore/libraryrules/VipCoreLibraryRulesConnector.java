@@ -37,6 +37,7 @@ public class VipCoreLibraryRulesConnector extends VipCoreConnector {
         USE_ENRICHMENTS("use_enrichments"),
         USE_LOCALDATA_STREAM("use_localdata_stream"),
         USE_HOLDINGS_ITEM("use_holdings_item"),
+        USE_CENTRAL_FAUST("use_central_faust"),
         AUTH_ROOT("auth_root"),
         AUTH_COMMON_SUBJECTS("auth_common_subjects"),
         AUTH_COMMON_NOTES("auth_common_notes"),
@@ -46,11 +47,15 @@ public class VipCoreLibraryRulesConnector extends VipCoreConnector {
         AUTH_AGENCY_COMMON_RECORD("auth_agency_common_record"),
         AUTH_EXPORT_HOLDINGS("auth_export_holdings"),
         AUTH_CREATE_COMMON_RECORD("auth_create_common_record"),
-        AUTH_ADD_DK5_TO_PHD_ALLOWED("auth_create_common_record"),
+        AUTH_ADD_DK5_TO_PHD_ALLOWED("auth_add_dk5_to_phd"),
         AUTH_METACOMPASS("auth_metacompass"),
+        VIEW_METACOMPASS("view_metacompass"),
         CATALOGING_TEMPLATE_SET("cataloging_template_set"),
         IMS_LIBRARY("ims_library"),
-        WORLDCAT_SYNCHRONIZE("worldcat_synchronize");
+        WORLDCAT_SYNCHRONIZE("worldcat_synchronize"),
+        WORLDCAT_RESOURCE_SHARING("worldcat_resource_sharing"),
+        PART_OF_REQUEST_ORDER("part_of_requestorder"),
+        REGIONAL_OBLIGATIONS("regional_obligations");
 
         private final String value;
 
