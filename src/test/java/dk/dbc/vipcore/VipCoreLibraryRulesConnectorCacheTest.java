@@ -7,25 +7,21 @@ import dk.dbc.vipcore.exception.VipCoreException;
 import dk.dbc.vipcore.libraryrules.VipCoreLibraryRulesConnector;
 import dk.dbc.vipcore.marshallers.LibraryRule;
 import dk.dbc.vipcore.marshallers.LibraryRulesRequest;
+import jakarta.ws.rs.client.Client;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import javax.ws.rs.client.Client;
-
 import java.util.Arrays;
 import java.util.Collections;
-import java.util.HashSet;
 
 import static com.github.tomakehurst.wiremock.client.WireMock.configureFor;
 import static com.github.tomakehurst.wiremock.client.WireMock.verify;
 import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options;
-import static org.hamcrest.CoreMatchers.is;
-import static org.hamcrest.MatcherAssert.assertThat;
 
-public class VipCoreLibraryRulesConnectorCacheTest {
+class VipCoreLibraryRulesConnectorCacheTest {
 
     private static WireMockServer wireMockServer;
     private static String wireMockHost;

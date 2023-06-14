@@ -1,8 +1,3 @@
-/*
- * Copyright Dansk Bibliotekscenter a/s. Licensed under GNU GPL v3
- *  See license text at https://opensource.dbc.dk/licenses/gpl-3.0
- */
-
 package dk.dbc.vipcore;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
@@ -21,7 +16,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import javax.ws.rs.client.Client;
+import jakarta.ws.rs.client.Client;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -33,7 +28,7 @@ import static com.github.tomakehurst.wiremock.core.WireMockConfiguration.options
 import static org.hamcrest.CoreMatchers.is;
 import static org.hamcrest.MatcherAssert.assertThat;
 
-public class VipCoreLibraryRulesConnectorTest {
+class VipCoreLibraryRulesConnectorTest {
 
     private static WireMockServer wireMockServer;
     private static String wireMockHost;

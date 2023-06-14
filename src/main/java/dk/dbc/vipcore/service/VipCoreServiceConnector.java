@@ -1,8 +1,3 @@
-/*
- * Copyright Dansk Bibliotekscenter a/s. Licensed under GNU GPL v3
- *  See license text at https://opensource.dbc.dk/licenses/gpl-3.0
- */
-
 package dk.dbc.vipcore.service;
 
 import dk.dbc.commons.jsonb.JSONBContext;
@@ -15,7 +10,7 @@ import dk.dbc.vipcore.marshallers.ServiceRequest;
 import dk.dbc.vipcore.marshallers.ServiceResponse;
 import org.apache.commons.collections4.map.PassiveExpiringMap;
 
-import javax.ws.rs.client.Client;
+import jakarta.ws.rs.client.Client;
 import java.util.concurrent.TimeUnit;
 
 public class VipCoreServiceConnector extends VipCoreConnector {
