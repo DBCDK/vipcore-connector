@@ -1,6 +1,6 @@
 #!groovy
 
-def workerNode = "devel10"
+def workerNode = "devel11"
 
 pipeline {
 	agent {label workerNode}
@@ -11,6 +11,11 @@ pipeline {
 		jdk "jdk11"
         maven "Maven 3"
     }
+	triggers {
+		pollSCM("H/03 * * * *")
+		upstream(upstreamProjects: "Docker-payara6-bump-trigger",
+				threshold: hudson.model.Result.SUCCESS)
+	}
 	stages {
 		stage("clear workspace") {
 			steps {
