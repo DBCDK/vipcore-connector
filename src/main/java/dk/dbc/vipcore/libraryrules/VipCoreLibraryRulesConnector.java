@@ -1,8 +1,3 @@
-/*
- * Copyright Dansk Bibliotekscenter a/s. Licensed under GNU GPL v3
- *  See license text at https://opensource.dbc.dk/licenses/gpl-3.0
- */
-
 package dk.dbc.vipcore.libraryrules;
 
 import dk.dbc.commons.jsonb.JSONBContext;
@@ -16,7 +11,7 @@ import dk.dbc.vipcore.marshallers.LibraryRulesRequest;
 import dk.dbc.vipcore.marshallers.LibraryRulesResponse;
 import org.apache.commons.collections4.map.PassiveExpiringMap;
 
-import javax.ws.rs.client.Client;
+import jakarta.ws.rs.client.Client;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
