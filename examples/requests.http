@@ -1,0 +1,6 @@
+POST http://vipcore.iscrum-vip-extern-test.svc.cloud.dbc.dk/1.0/api/libraryrules
+Content-Type: application/json
+
+{
+  "agencyId": "870970"
+}
