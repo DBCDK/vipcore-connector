@@ -61,6 +61,7 @@ class VipCoreLibraryRulesConnectorTest {
         assertThat(connector.hasFeature("010100", VipCoreLibraryRulesConnector.Rule.AUTH_ROOT), is(true));
         assertThat(connector.hasFeature("710100", VipCoreLibraryRulesConnector.Rule.AUTH_ROOT), is(false));
         assertThat(connector.hasFeature("710100", VipCoreLibraryRulesConnector.Rule.USE_ENRICHMENTS), is(true));
+        assertThat(connector.hasFeature("710100", VipCoreLibraryRulesConnector.Rule.AUTH_VERA), is(false));
     }
 
     @Test
@@ -104,7 +105,7 @@ class VipCoreLibraryRulesConnectorTest {
     }
 
     @Test
-    void getLibraryRulesByAgencyIdTest() throws VipCoreException {
+    void getLibraryRulesByAgencyIdTestDBC() throws VipCoreException {
         final List<LibraryRule> expectedLibraryRuleList010100 = new ArrayList<>();
         expectedLibraryRuleList010100.add(createLibraryRule("create_enrichments", true, null));
         expectedLibraryRuleList010100.add(createLibraryRule("use_enrichments", false, null));
@@ -139,7 +140,10 @@ class VipCoreLibraryRulesConnectorTest {
         expectedLibraryRules010100.setAgencyType("Other");
 
         assertThat(connector.getLibraryRulesByAgencyId("010100"), is(expectedLibraryRules010100));
+    }
 
+    @Test
+    void getLibraryRulesByAgencyIdTestOther() throws VipCoreException {
         final List<LibraryRule> expectedLibraryRuleList710100 = new ArrayList<>();
         expectedLibraryRuleList710100.add(createLibraryRule("create_enrichments", true, null));
         expectedLibraryRuleList710100.add(createLibraryRule("use_enrichments", true, null));
