@@ -9,6 +9,7 @@ import dk.dbc.vipcore.libraryrules.VipCoreLibraryRulesConnector;
 import dk.dbc.vipcore.marshallers.LibraryRule;
 import dk.dbc.vipcore.marshallers.LibraryRules;
 import dk.dbc.vipcore.marshallers.LibraryRulesRequest;
+import jakarta.ws.rs.client.Client;
 import org.glassfish.jersey.client.ClientConfig;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.junit.jupiter.api.AfterAll;
@@ -16,7 +17,6 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import jakarta.ws.rs.client.Client;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -72,6 +72,7 @@ class VipCoreLibraryRulesConnectorTest {
                                 "auth_public_lib_common_record",
                                 "auth_common_notes",
                                 "auth_agency_common_record",
+                                "view_metacompass",
                                 "create_enrichments",
                                 "auth_common_subjects",
                                 "auth_root",
@@ -81,28 +82,25 @@ class VipCoreLibraryRulesConnectorTest {
                 )
         ));
 
-        assertThat(connector.getAllowedLibraryRules("710100"), is(new HashSet<String>() {
-            /**
-             *
-             */
-            private static final long serialVersionUID = 177297076452796083L;
-
-            {
-                add("auth_common_notes");
-                add("auth_agency_common_record");
-                add("use_localdata_stream");
-                add("create_enrichments");
-                add("use_enrichments");
-                add("use_central_faust");
-                add("auth_public_lib_common_record");
-                add("use_holdings_item");
-                add("auth_common_subjects");
-                add("auth_export_holdings");
-                add("auth_ret_record");
-                add("auth_create_common_record");
-                add("auth_add_dk5_to_phd");
-            }
-        }));
+        assertThat(connector.getAllowedLibraryRules("710100"), is(new HashSet<>(
+                Arrays.asList(
+                        "ims_library",
+                        "auth_common_notes",
+                        "auth_agency_common_record",
+                        "use_localdata_stream",
+                        "part_of_requestorder",
+                        "create_enrichments",
+                        "use_enrichments",
+                        "use_central_faust",
+                        "auth_public_lib_common_record",
+                        "use_holdings_item",
+                        "auth_common_subjects",
+                        "auth_export_holdings",
+                        "auth_ret_record",
+                        "auth_create_common_record",
+                        "auth_add_dk5_to_phd"
+                )
+        )));
     }
 
     @Test
@@ -129,12 +127,16 @@ class VipCoreLibraryRulesConnectorTest {
         expectedLibraryRuleList010100.add(createLibraryRule("part_of_danbib", false, null));
         expectedLibraryRuleList010100.add(createLibraryRule("auth_add_dk5_to_phd", true, null));
         expectedLibraryRuleList010100.add(createLibraryRule("auth_metacompass", false, null));
-        expectedLibraryRuleList010100.add(createLibraryRule("view_metacompass", false, null));
+        expectedLibraryRuleList010100.add(createLibraryRule("view_metacompass", true, null));
         expectedLibraryRuleList010100.add(createLibraryRule("use_central_faust", true, null));
+        expectedLibraryRuleList010100.add(createLibraryRule("part_of_requestorder", false, null));
+        expectedLibraryRuleList010100.add(createLibraryRule("regional_obligations", false, null));
+        expectedLibraryRuleList010100.add(createLibraryRule("auth_vera", false, null));
 
         final LibraryRules expectedLibraryRules010100 = new LibraryRules();
         expectedLibraryRules010100.setLibraryRule(expectedLibraryRuleList010100);
         expectedLibraryRules010100.setAgencyId("010100");
+        expectedLibraryRules010100.setAgencyType("Other");
 
         assertThat(connector.getLibraryRulesByAgencyId("010100"), is(expectedLibraryRules010100));
 
@@ -153,7 +155,7 @@ class VipCoreLibraryRulesConnectorTest {
         expectedLibraryRuleList710100.add(createLibraryRule("use_holdings_item", true, null));
         expectedLibraryRuleList710100.add(createLibraryRule("part_of_bibliotek_dk", false, null));
         expectedLibraryRuleList710100.add(createLibraryRule("auth_create_common_record", true, null));
-        expectedLibraryRuleList710100.add(createLibraryRule("ims_library", false, null));
+        expectedLibraryRuleList710100.add(createLibraryRule("ims_library", true, null));
         expectedLibraryRuleList710100.add(createLibraryRule("worldcat_synchronize", false, null));
         expectedLibraryRuleList710100.add(createLibraryRule("worldcat_resource_sharing", false, null));
         expectedLibraryRuleList710100.add(createLibraryRule("cataloging_template_set", null, "fbs"));
@@ -162,6 +164,9 @@ class VipCoreLibraryRulesConnectorTest {
         expectedLibraryRuleList710100.add(createLibraryRule("auth_metacompass", false, null));
         expectedLibraryRuleList710100.add(createLibraryRule("view_metacompass", false, null));
         expectedLibraryRuleList710100.add(createLibraryRule("use_central_faust", true, null));
+        expectedLibraryRuleList710100.add(createLibraryRule("part_of_requestorder", true, null));
+        expectedLibraryRuleList710100.add(createLibraryRule("regional_obligations", false, null));
+        expectedLibraryRuleList710100.add(createLibraryRule("auth_vera", false, null));
 
         final LibraryRules expectedLibraryRules710100 = new LibraryRules();
         expectedLibraryRules710100.setLibraryRule(expectedLibraryRuleList710100);
@@ -182,7 +187,7 @@ class VipCoreLibraryRulesConnectorTest {
         libraryRulesRequest.setLibraryRule(Collections.singletonList(libraryRuleIms));
 
         assertThat(connector.getLibraries(libraryRulesRequest), is(new HashSet<>(
-                Collections.singletonList("775100")
+                List.of("785100", "775100", "737000", "754000", "710100")
         )));
 
         final LibraryRule libraryRuleAuthRoot = new LibraryRule();
@@ -192,7 +197,7 @@ class VipCoreLibraryRulesConnectorTest {
         libraryRulesRequest.setLibraryRule(Collections.singletonList(libraryRuleAuthRoot));
 
         assertThat(connector.getLibraries(libraryRulesRequest), is(new HashSet<>(
-                Collections.singletonList("010100")
+                List.of("010100", "790900")
         )));
     }
 
@@ -206,7 +211,7 @@ class VipCoreLibraryRulesConnectorTest {
         libraryRulesRequest.setLibraryRule(Collections.singletonList(catalogingTemplateSetDBS));
 
         assertThat(connector.getLibraries(libraryRulesRequest), is(new HashSet<>(
-                Collections.singletonList("010100")
+                List.of("000002", "150094", "000007", "870978", "870977", "000004", "190008", "870979", "870974", "870973", "870976", "000008", "870975", "870970", "870971", "010100", "190007", "150077", "190004", "190002")
         )));
 
         final LibraryRule catalogingTemplateSetFBS = new LibraryRule();
@@ -216,61 +221,26 @@ class VipCoreLibraryRulesConnectorTest {
 
         assertThat(connector.getLibraries(libraryRulesRequest), is(new HashSet<>(
                 Arrays.asList(
-                        "561884", "516950", "871740", "562739", "563949", "133030", "131090", "581000", "860960",
-                        "133150", "556160", "562980", "510164", "560683", "510165", "753000", "510167", "563715",
-                        "948200", "500002", "500243", "861700", "133160", "546120", "133040", "562992", "510073",
-                        "515766", "562994", "563962", "546107", "777300", "725900", "503302", "871890", "503301",
-                        "500031", "503304", "503303", "500278", "503300", "133170", "133050", "792615", "562882",
-                        "861970", "582130", "900006", "831260", "900004", "562764", "900003", "562525", "561437",
-                        "747900", "872960", "741000", "575712", "133180", "515988", "133060", "547310", "861720",
-                        "133100", "775100", "571520", "740000", "500296", "550540", "526566", "763000", "131170",
-                        "133110", "875190", "131050", "774000", "503309", "562944", "871930", "503306", "501007",
-                        "503305", "503308", "510083", "784900", "503307", "546160", "718300", "766500", "721700",
-                        "503311", "503310", "131060", "131180", "133120", "860810", "733600", "131070", "133130",
-                        "131190", "133010", "546153", "732600", "751000", "782500", "774100", "778700", "546140",
-                        "739000", "502005", "574700", "500068", "133140", "133020", "131080", "779100", "756100",
-                        "721000", "682105", "523530", "744000", "500650", "772700", "861430", "861790", "562903",
-                        "533100", "872300", "872310", "522330", "874970", "710100", "714700", "733000", "737600",
-                        "861560", "861680", "514710", "533310", "760700", "852730", "874400", "500790", "767100",
-                        "500794", "500430", "500793", "300185", "715700", "514702", "732000", "300183", "300187",
-                        "561950", "757300", "536710", "755000", "618799", "572720", "533320", "874500", "873300",
-                        "874510", "526910", "300190", "581310", "716900", "568110", "300159", "515940", "300157",
-                        "754000", "872510", "872630", "133190", "786000", "872760", "500455", "719000", "300163",
-                        "300161", "133070", "300167", "510129", "770600", "300165", "538951", "300169", "575180",
-                        "720100", "133080", "743000", "766100", "300173", "545110", "300175", "300259", "632904",
-                        "700400", "617314", "874710", "872780", "873630", "874840", "133090", "742000", "559977",
-                        "300260", "715900", "300265", "770700", "000300", "300269", "776000", "300147", "757500",
-                        "510144", "944500", "726900", "500698", "533120", "722300", "872770", "872530", "870110",
-                        "300390", "556699", "300151", "300270", "300155", "300153", "791615", "300479", "748200",
-                        "758000", "500804", "875310", "521990", "874340", "872160", "874460", "300360", "774600",
-                        "782000", "300240", "300482", "872280", "300480", "517355", "872150", "874450", "874330",
-                        "874570", "300250", "300492", "300370", "300376", "300253", "300336", "300575", "300219",
-                        "131300", "300217", "517380", "532610", "874240", "300580", "300101", "715300", "300340",
-                        "300461", "300223", "724000", "861170", "761500", "550164", "575158", "875320", "735000",
-                        "300350", "300230", "716500", "861340", "861580", "300316", "536920", "860490", "530022",
-                        "746100", "530023", "530020", "530021", "852750", "530019", "530015", "734000", "547940",
-                        "300320", "300563", "300440", "300561", "561176", "300201", "861110", "300329", "861470",
-                        "300326", "861590", "534510", "852760", "575101", "873200", "530028", "874650", "874530",
-                        "530026", "521320", "530027", "530024", "530025", "300210", "300573", "300450", "300330",
-                        "790900", "300410", "300773", "300411", "300779", "547913", "563006", "300657", "547910",
-                        "563129", "725300", "723000", "575112", "552148", "552147", "874320", "575105", "556623",
-                        "872260", "873350", "874560", "784000", "521530", "561190", "300540", "300661", "561073",
-                        "300420", "715500", "300665", "300787", "300306", "745000", "726500", "875400", "873220",
-                        "785100", "873340", "874550", "500981", "507015", "872250", "543310", "300430", "716700",
-                        "300791", "300550", "300671", "731600", "300630", "300751", "131120", "300510", "773000",
-                        "781300", "133300", "300756", "862190", "717300", "503000", "875030", "875150", "874180",
-                        "131130", "300760", "726000", "131010", "300400", "300766", "521911", "718500", "573120",
-                        "721900", "551540", "762100", "131020", "131140", "300530", "727000", "543910", "300730",
-                        "300851", "133200", "300615", "530710", "573130", "585107", "776600", "875170", "562482",
-                        "131030", "300860", "585104", "874080", "131150", "585101", "562120", "300621", "300740",
-                        "300741", "300746", "784600", "537360", "765700", "503015", "716100", "546180", "615718",
-                        "502041", "131040", "563221", "131160", "565760", "131200", "300710", "748000", "725000",
-                        "551000", "550022", "616916", "717500", "300840", "562663", "732900", "679308", "300846",
-                        "562786", "643111", "300607", "300849", "300727", "875340", "531510", "737000", "777900",
-                        "874370", "775600", "300970", "586620", "718700", "566910", "131100", "562672", "300813",
-                        "300810", "565701", "781000", "771000", "520950", "520710", "715100", "505004", "736000",
-                        "505002", "554600", "875370", "730600", "541523", "300820", "562562", "131110", "749200",
-                        "300706", "300707", "300825", "521930", "716300"
+                        "731600", "131120", "773000", "779100", "781300", "133300", "748200", "756100",
+                        "721000", "758000", "717300", "744000", "133030", "774600", "782000", "131090",
+                        "131130", "772700", "133150", "726000", "131010", "753000", "718500", "721900",
+                        "762100", "710100", "714700", "733000", "737600", "131020", "131140", "133160",
+                        "546120", "133040", "727000", "543910", "133200", "131300", "777300", "725900",
+                        "760700", "767100", "715700", "732000", "776600", "131030", "133170", "300860",
+                        "715300", "131150", "133050", "792615", "300741", "724000", "757300", "755000",
+                        "761500", "784600", "765700", "747900", "741000", "716100", "546180", "735000",
+                        "716900", "133180", "133060", "820012", "131040", "131160", "716500", "131200",
+                        "133100", "748000", "725000", "775100", "754000", "746100", "740000", "133190",
+                        "786000", "872760", "719000", "763000", "131170", "734000", "133110", "133070",
+                        "717500", "770600", "131050", "732900", "774000", "720100", "784900", "546160",
+                        "718300", "766500", "133080", "721700", "743000", "766100", "737000", "131060",
+                        "131180", "777900", "133120", "775600", "545110", "300970", "718700", "733600",
+                        "790900", "131100", "300773", "300411", "781000", "771000", "700400", "725300",
+                        "723000", "133090", "715100", "736000", "742000", "784000", "131070", "133130",
+                        "131190", "133010", "715900", "300540", "730600", "546153", "715500", "770700",
+                        "732600", "776000", "751000", "131110", "757500", "782500", "774100", "778700",
+                        "749200", "745000", "726900", "722300", "726500", "739000", "716300", "785100",
+                        "133140", "133020", "131080", "543310", "716700", "791615"
                 )
         )));
 
@@ -299,7 +269,7 @@ class VipCoreLibraryRulesConnectorTest {
         libraryRulesRequest.setLibraryRule(Arrays.asList(libraryRuleIms, libraryRuleCreateEnrichments));
 
         assertThat(connector.getLibraries(libraryRulesRequest), is(new HashSet<>(
-                Collections.singletonList("775100")
+                List.of("785100", "775100", "737000", "754000", "710100")
         )));
     }
 

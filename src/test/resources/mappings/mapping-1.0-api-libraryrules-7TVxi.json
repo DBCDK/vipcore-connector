@@ -1,5 +1,5 @@
 {
-  "id" : "d305af4f-54a8-3e38-bf43-eb276847edf4",
+  "id" : "b6ee0367-6ee2-33d4-9335-487ef7c65665",
   "request" : {
     "url" : "/1.0/api/libraryrules",
     "method" : "POST",
@@ -11,12 +11,14 @@
   },
   "response" : {
     "status" : 404,
-    "bodyFileName" : "body-libraryrules-tgZaD.json",
+    "bodyFileName" : "body-1.0-api-libraryrules-7TVxi.json",
     "headers" : {
+      "X-Frame-Options" : "SAMEORIGIN",
+      "Keep-Alive" : "timeout=10s",
       "Server" : "Payara Micro #badassfish",
-      "Content-Type" : "application/json",
-      "X-Frame-Options" : "SAMEORIGIN"
+      "Cluster-Node" : "vipcore-1",
+      "Content-Type" : "application/json"
     }
   },
-  "uuid" : "d305af4f-54a8-3e38-bf43-eb276847edf4"
+  "uuid" : "b6ee0367-6ee2-33d4-9335-487ef7c65665"
 }

@@ -1,5 +1,5 @@
 {
-  "id" : "193fe4c6-15e4-3589-a4f7-10de738b0a5a",
+  "id" : "731b7dd6-38d2-3f43-a1c9-042b81cefc33",
   "request" : {
     "url" : "/1.0/api/service",
     "method" : "POST",
@@ -11,12 +11,14 @@
   },
   "response" : {
     "status" : 404,
-    "bodyFileName" : "body-service-wwVwq.json",
+    "bodyFileName" : "body-1.0-api-service-O5ncX.json",
     "headers" : {
+      "X-Frame-Options" : "SAMEORIGIN",
+      "Keep-Alive" : "timeout=10s",
       "Server" : "Payara Micro #badassfish",
-      "Content-Type" : "application/json",
-      "X-Frame-Options" : "SAMEORIGIN"
+      "Cluster-Node" : "vipcore-1",
+      "Content-Type" : "application/json"
     }
   },
-  "uuid" : "193fe4c6-15e4-3589-a4f7-10de738b0a5a"
+  "uuid" : "731b7dd6-38d2-3f43-a1c9-042b81cefc33"
 }

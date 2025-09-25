@@ -53,10 +53,12 @@ class VipCoreServiceConnectorTest {
     @Test
     void getInformationTest_010100() throws VipCoreException {
         final Information expected = new Information();
-        expected.setAgencyId("");
+        expected.setAgencyId("010100");
         expected.setBranchId("010100");
+        expected.setAgencyName("Dansk BiblioteksCenter");
+        expected.setAgencyType("Other");
         final BranchName branchName = new BranchName();
-        branchName.setValue("Dansk BiblioteksCenter as, DANBIB - Vivi Boesen Roer");
+        branchName.setValue("Dansk BiblioteksCenter");
         expected.setBranchName(branchName);
         expected.setBranchPhone("44867777");
         expected.setBranchEmail("checkmail@dbc.dk");
@@ -68,8 +70,8 @@ class VipCoreServiceConnectorTest {
         expected.setKvik("NO");
         expected.setNorfri("NO");
         expected.setRequestOrder("10100");
-        expected.setSender("790900");
-        expected.setReplyToEmail("checkmail@dbc.dk");
+        expected.setSender("010100");
+        expected.setReplyToEmail("returors@dbc.dk");
 
         final Information actual = connector.getInformation("010100");
 
