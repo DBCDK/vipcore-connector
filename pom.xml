@@ -8,7 +8,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
     <artifactId>vipcore-connector</artifactId>
-    <version>1.5-SNAPSHOT</version>
+    <version>1.6-SNAPSHOT</version>
     <packaging>jar</packaging>
 
     <name>VipCore Connector</name>
@@ -23,7 +23,7 @@
     <parent>
         <groupId>dk.dbc</groupId>
         <artifactId>microservice-pom</artifactId>
-        <version>java11-SNAPSHOT</version>
+        <version>java17-SNAPSHOT</version>
         <relativePath/>
     </parent>
 

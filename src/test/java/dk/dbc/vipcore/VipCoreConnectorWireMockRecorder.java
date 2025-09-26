@@ -38,7 +38,8 @@ public class VipCoreConnectorWireMockRecorder {
             throws VipCoreException {
         connectorTest.isAllowedTest();
         connectorTest.getAllowedLibraryRulesTest();
-        connectorTest.getLibraryRulesByAgencyIdTest();
+        connectorTest.getLibraryRulesByAgencyIdTestDBC();
+        connectorTest.getLibraryRulesByAgencyIdTestOther();
         connectorTest.getLibrariesTest();
         connectorTest.getLibrariesCatalogingTemplateSetTest();
         connectorTest.getLibrariesCombinesRulesTest();
