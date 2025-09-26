@@ -1,16 +1,12 @@
 #!groovy
 
-def workerNode = "devel11"
+def workerNode = "devel12"
 
 pipeline {
 	agent {label workerNode}
 	options {
 		timestamps()
 	}
-	tools {
-		jdk "jdk11"
-        maven "Maven 3"
-    }
 	triggers {
 		pollSCM("H/03 * * * *")
 		upstream(upstreamProjects: "Docker-payara6-bump-trigger",
