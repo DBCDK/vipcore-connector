@@ -21,20 +21,35 @@ pipeline {
 		}
 		stage("verify") {
 			steps {
-				sh "mvn verify pmd:pmd javadoc:aggregate"
+				sh "mvn-B -Dmaven.repo.local=$WORKSPACE/.repo --no-transfer-progress verify javadoc:aggregate"
 
 				junit testResults: 'target/surefire-reports/TEST-*.xml'
 
-				script {
-					def java = scanForIssues tool: [$class: 'Java']
-					def javadoc = scanForIssues tool: [$class: 'JavaDoc']
-					publishIssues issues: [java, javadoc]
+                def sonarOptions = "-Dsonar.branch.name=$BRANCH_NAME"
+                if (env.BRANCH_NAME != 'master') {
+                    sonarOptions += " -Dsonar.newCode.referenceBranch=master"
+                }
+                status += sh returnStatus: true, script: """
+                    mvn -B -Dmaven.repo.local=$WORKSPACE/.repo --no-transfer-progress $sonarOptions sonar:sonar
+                """
 
-					def pmd = scanForIssues tool: [$class: 'Pmd'], pattern: '**/target/pmd.xml'
-					publishIssues issues: [pmd]
-				}
+                junit testResults: '**/target/*-reports/*.xml'
+
+                def javadoc = scanForIssues tool: [$class: 'JavaDoc']
+                publishIssues issues: [javadoc], unstableTotalAll: 1
+
+                if (status != 0) {
+                    error("build failed")
+                }
 			}
 		}
+        stage("quality gate") {
+            steps {
+                timeout(time: 1, unit: 'HOURS') {
+                    waitForQualityGate abortPipeline: true
+                }
+            }
+        }
 		stage("deploy") {
 			when {
 				branch "main"
