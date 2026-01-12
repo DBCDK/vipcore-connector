@@ -1,9 +1,8 @@
 package dk.dbc.vipcore;
 
+import dk.dbc.commons.useragent.UserAgent;
 import dk.dbc.httpclient.FailSafeHttpClient;
 import dk.dbc.httpclient.HttpPost;
-import dk.dbc.invariant.InvariantUtil;
-import dk.dbc.util.Stopwatch;
 import dk.dbc.vipcore.dto.ErrorMessageDTO;
 import dk.dbc.vipcore.exception.AgencyNotFoundException;
 import dk.dbc.vipcore.exception.AuthenticationErrorException;
@@ -13,15 +12,17 @@ import dk.dbc.vipcore.exception.NoUserIdSelectedException;
 import dk.dbc.vipcore.exception.ProfileNotFoundException;
 import dk.dbc.vipcore.exception.ServiceUnavailableException;
 import dk.dbc.vipcore.exception.VipCoreException;
-import net.jodah.failsafe.RetryPolicy;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import jakarta.ws.rs.ProcessingException;
 import jakarta.ws.rs.client.Client;
 import jakarta.ws.rs.core.Response;
+import net.jodah.failsafe.RetryPolicy;
+import org.perf4j.StopWatch;
+import org.perf4j.log4j.Log4JStopWatch;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.time.Duration;
-import java.util.concurrent.TimeUnit;
+import java.util.Objects;
 
 public abstract class VipCoreConnector {
     public enum TimingLogLevel {
@@ -41,6 +42,7 @@ public abstract class VipCoreConnector {
     private final String baseUrl;
     private final LogLevelMethod logger;
 
+
     /**
      * Returns new instance with default retry policy
      *
@@ -48,7 +50,7 @@ public abstract class VipCoreConnector {
      * @param baseUrl    base URL for vipcore service endpoint
      */
     protected VipCoreConnector(Client httpClient, String baseUrl) {
-        this(FailSafeHttpClient.create(httpClient, RETRY_POLICY), baseUrl, TimingLogLevel.INFO);
+        this(FailSafeHttpClient.create(httpClient, UserAgent.forInternalRequests(), RETRY_POLICY), baseUrl, TimingLogLevel.INFO);
     }
 
     /**
@@ -59,7 +61,7 @@ public abstract class VipCoreConnector {
      * @param level      timings log level
      */
     protected VipCoreConnector(Client httpClient, String baseUrl, TimingLogLevel level) {
-        this(FailSafeHttpClient.create(httpClient, RETRY_POLICY), baseUrl, level);
+        this(FailSafeHttpClient.create(httpClient, UserAgent.forInternalRequests(), RETRY_POLICY), baseUrl, level);
     }
 
     /**
@@ -80,10 +82,13 @@ public abstract class VipCoreConnector {
      * @param level              timings log level
      */
     protected VipCoreConnector(FailSafeHttpClient failSafeHttpClient, String baseUrl, TimingLogLevel level) {
-        this.failSafeHttpClient = InvariantUtil.checkNotNullOrThrow(
-                failSafeHttpClient, "failSafeHttpClient");
-        this.baseUrl = InvariantUtil.checkNotNullNotEmptyOrThrow(
-                baseUrl, "baseUrl");
+        Objects.requireNonNull(failSafeHttpClient, "failSafeHttpClient must not be null");
+        Objects.requireNonNull(baseUrl, "baseUrl must not be null");
+        if (baseUrl.isEmpty()) {
+            throw new IllegalArgumentException("baseUrl must not be empty");
+        }
+        this.failSafeHttpClient = failSafeHttpClient;
+        this.baseUrl = baseUrl;
         switch (level) {
             case TRACE:
                 logger = LOGGER::trace;
@@ -113,7 +118,7 @@ public abstract class VipCoreConnector {
     protected <T> T postRequest(String basePath,
                                 String data,
                                 Class<T> type) throws VipCoreException {
-        final Stopwatch stopwatch = new Stopwatch();
+        final StopWatch watch = new Log4JStopWatch();
         try {
             final HttpPost httpPost = new HttpPost(failSafeHttpClient)
                     .withBaseUrl(baseUrl)
@@ -124,9 +129,7 @@ public abstract class VipCoreConnector {
             assertResponseStatus(response, Response.Status.OK);
             return readResponseEntity(response, type);
         } finally {
-            logger.log("POST /{} took {} milliseconds",
-                    basePath,
-                    stopwatch.getElapsedTime(TimeUnit.MILLISECONDS));
+            watch.stop("VipCoreConnector.postRequest");
         }
     }
 
