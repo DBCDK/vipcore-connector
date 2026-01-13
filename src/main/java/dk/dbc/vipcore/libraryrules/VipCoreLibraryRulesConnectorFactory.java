@@ -1,5 +1,6 @@
 package dk.dbc.vipcore.libraryrules;
 
+import dk.dbc.commons.useragent.UserAgent;
 import dk.dbc.httpclient.HttpClient;
 import dk.dbc.vipcore.VipCoreConnector;
 
@@ -51,14 +52,14 @@ public class VipCoreLibraryRulesConnectorFactory {
         final Client client = HttpClient.newClient(new ClientConfig()
                 .register(new JacksonFeature()));
         LOGGER.info("Creating VipCoreLibraryRulesConnector for: {}", vipcoreServiceBaseUrl);
-        return new VipCoreLibraryRulesConnector(client, vipcoreServiceBaseUrl);
+        return new VipCoreLibraryRulesConnector(client, UserAgent.forInternalRequests(), vipcoreServiceBaseUrl);
     }
 
     public static VipCoreLibraryRulesConnector create(String vipcoreServiceBaseUrl, int cacheAge, VipCoreConnector.TimingLogLevel level) {
         final Client client = HttpClient.newClient(new ClientConfig()
                 .register(new JacksonFeature()));
         LOGGER.info("Creating VipCoreLibraryRulesConnector for: {}", vipcoreServiceBaseUrl);
-        return new VipCoreLibraryRulesConnector(client, vipcoreServiceBaseUrl, cacheAge, level);
+        return new VipCoreLibraryRulesConnector(client, UserAgent.forInternalRequests(), vipcoreServiceBaseUrl, cacheAge, level);
     }
 
     @Inject

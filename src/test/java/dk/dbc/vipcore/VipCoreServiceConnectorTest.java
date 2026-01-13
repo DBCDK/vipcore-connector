@@ -1,6 +1,7 @@
 package dk.dbc.vipcore;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
+import dk.dbc.commons.useragent.UserAgent;
 import dk.dbc.httpclient.HttpClient;
 import dk.dbc.vipcore.exception.AgencyNotFoundException;
 import dk.dbc.vipcore.exception.ErrorInRequestException;
@@ -42,7 +43,8 @@ class VipCoreServiceConnectorTest {
 
     @BeforeAll
     static void setConnector() {
-        connector = new VipCoreServiceConnector(CLIENT, wireMockHost, 0, VipCoreConnector.TimingLogLevel.INFO);
+        final UserAgent userAgent = new UserAgent("VipCoreServiceConnectorTest");
+        connector = new VipCoreServiceConnector(CLIENT, userAgent, wireMockHost, 0, VipCoreConnector.TimingLogLevel.INFO);
     }
 
     @AfterAll
