@@ -23,8 +23,8 @@ pipeline {
                         """
 
                         def sonarOptions = "-Dsonar.branch.name=$BRANCH_NAME"
-                        if (env.BRANCH_NAME != 'master') {
-                            sonarOptions += " -Dsonar.newCode.referenceBranch=master"
+                        if (env.BRANCH_NAME != 'main') {
+                            sonarOptions += " -Dsonar.newCode.referenceBranch=main"
                         }
 
                         status += sh returnStatus: true, script: """
@@ -51,7 +51,7 @@ pipeline {
         stage("upload") {
             steps {
                 script {
-                    if (env.BRANCH_NAME == 'master') {
+                    if (env.BRANCH_NAME == 'main') {
                         sh """
                             mvn -B -Dmaven.repo.local=$WORKSPACE/.repo --no-transfer-progress jar:jar deploy:deploy
                         """
@@ -63,13 +63,13 @@ pipeline {
     post {
         failure {
             script {
-                if (env.BRANCH_NAME == 'master') {
+                if (env.BRANCH_NAME == 'main') {
                     emailext(
                             recipientProviders: [developers(), culprits()],
                             to: "${ownerEmail}",
                             subject: "[Jenkins] ${env.JOB_NAME} #${env.BUILD_NUMBER} failed",
                             mimeType: 'text/html; charset=UTF-8',
-                            body: "<p>The master build failed. Log attached. </p><p><a href=\"${env.BUILD_URL}\">Build information</a>.</p>",
+                            body: "<p>The main build failed. Log attached. </p><p><a href=\"${env.BUILD_URL}\">Build information</a>.</p>",
                             attachLog: true,
                     )
                     slackSend(channel: "${ownerSlack}",

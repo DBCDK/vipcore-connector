@@ -2,6 +2,7 @@ package dk.dbc.vipcore;
 
 import com.github.tomakehurst.wiremock.WireMockServer;
 import com.github.tomakehurst.wiremock.matching.RequestPatternBuilder;
+import dk.dbc.commons.useragent.UserAgent;
 import dk.dbc.httpclient.HttpClient;
 import dk.dbc.vipcore.exception.VipCoreException;
 import dk.dbc.vipcore.libraryrules.VipCoreLibraryRulesConnector;
@@ -41,7 +42,8 @@ class VipCoreLibraryRulesConnectorCacheTest {
 
     @BeforeAll
     static void setConnector() {
-        connector = new VipCoreLibraryRulesConnector(CLIENT, wireMockHost, 1, VipCoreConnector.TimingLogLevel.INFO);
+        final UserAgent userAgent = new UserAgent("VipCoreLibraryRulesConnectorCacheTest");
+        connector = new VipCoreLibraryRulesConnector(CLIENT, userAgent, wireMockHost, 1, VipCoreConnector.TimingLogLevel.INFO);
     }
 
     @AfterAll

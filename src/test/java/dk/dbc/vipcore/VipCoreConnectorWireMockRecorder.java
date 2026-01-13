@@ -5,6 +5,7 @@
 
 package dk.dbc.vipcore;
 
+import dk.dbc.commons.useragent.UserAgent;
 import dk.dbc.vipcore.exception.VipCoreException;
 import dk.dbc.vipcore.libraryrules.VipCoreLibraryRulesConnector;
 import dk.dbc.vipcore.service.VipCoreServiceConnector;
@@ -22,10 +23,11 @@ public class VipCoreConnectorWireMockRecorder {
      */
 
     public static void main(String[] args) throws Exception {
+        final UserAgent userAgent = new UserAgent("VipCoreConnectorWireMockRecorder");
         VipCoreLibraryRulesConnectorTest.connector = new VipCoreLibraryRulesConnector(
-                VipCoreLibraryRulesConnectorTest.CLIENT, "http://localhost:8080");
+                VipCoreLibraryRulesConnectorTest.CLIENT, userAgent,"http://localhost:8080");
         VipCoreServiceConnectorTest.connector = new VipCoreServiceConnector(
-                VipCoreServiceConnectorTest.CLIENT, "http://localhost:8080");
+                VipCoreServiceConnectorTest.CLIENT, userAgent,"http://localhost:8080");
 
         final VipCoreLibraryRulesConnectorTest vipCoreLibraryRulesConnectorTest = new VipCoreLibraryRulesConnectorTest();
         final VipCoreServiceConnectorTest vipCoreServiceConnectorTest = new VipCoreServiceConnectorTest();

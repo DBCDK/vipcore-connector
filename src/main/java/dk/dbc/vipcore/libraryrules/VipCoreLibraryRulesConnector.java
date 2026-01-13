@@ -2,6 +2,7 @@ package dk.dbc.vipcore.libraryrules;
 
 import dk.dbc.commons.jsonb.JSONBContext;
 import dk.dbc.commons.jsonb.JSONBException;
+import dk.dbc.commons.useragent.UserAgent;
 import dk.dbc.httpclient.FailSafeHttpClient;
 import dk.dbc.vipcore.VipCoreConnector;
 import dk.dbc.vipcore.exception.VipCoreException;
@@ -77,8 +78,8 @@ public class VipCoreLibraryRulesConnector extends VipCoreConnector {
      * @param httpClient web resources client
      * @param baseUrl    base URL for vipcore service endpoint
      */
-    public VipCoreLibraryRulesConnector(Client httpClient, String baseUrl) {
-        super(httpClient, baseUrl, TimingLogLevel.INFO);
+    public VipCoreLibraryRulesConnector(Client httpClient, UserAgent userAgent, String baseUrl) {
+        super(httpClient, userAgent, baseUrl, TimingLogLevel.INFO);
 
         libraryRuleCache = new PassiveExpiringMap<>(MAX_CACHE_AGE, TimeUnit.HOURS);
         libraryRulesByAgencyIdCache = new PassiveExpiringMap<>(MAX_CACHE_AGE, TimeUnit.HOURS);
@@ -91,8 +92,8 @@ public class VipCoreLibraryRulesConnector extends VipCoreConnector {
      * @param baseUrl    base URL for vipcore service endpoint
      * @param level      timings log level
      */
-    public VipCoreLibraryRulesConnector(Client httpClient, String baseUrl, int cacheAge, TimingLogLevel level) {
-        super(httpClient, baseUrl, level);
+    public VipCoreLibraryRulesConnector(Client httpClient, UserAgent userAgent, String baseUrl, int cacheAge, TimingLogLevel level) {
+        super(httpClient, userAgent, baseUrl, level);
 
         libraryRuleCache = new PassiveExpiringMap<>(cacheAge, TimeUnit.HOURS);
         libraryRulesByAgencyIdCache = new PassiveExpiringMap<>(cacheAge, TimeUnit.HOURS);

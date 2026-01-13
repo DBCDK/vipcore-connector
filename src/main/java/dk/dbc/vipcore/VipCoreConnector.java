@@ -49,8 +49,8 @@ public abstract class VipCoreConnector {
      * @param httpClient web resources client
      * @param baseUrl    base URL for vipcore service endpoint
      */
-    protected VipCoreConnector(Client httpClient, String baseUrl) {
-        this(FailSafeHttpClient.create(httpClient, UserAgent.forInternalRequests(), RETRY_POLICY), baseUrl, TimingLogLevel.INFO);
+    protected VipCoreConnector(Client httpClient, UserAgent userAgent, String baseUrl) {
+        this(FailSafeHttpClient.create(httpClient, userAgent, RETRY_POLICY), baseUrl, TimingLogLevel.INFO);
     }
 
     /**
@@ -60,8 +60,8 @@ public abstract class VipCoreConnector {
      * @param baseUrl    base URL for vipcore service endpoint
      * @param level      timings log level
      */
-    protected VipCoreConnector(Client httpClient, String baseUrl, TimingLogLevel level) {
-        this(FailSafeHttpClient.create(httpClient, UserAgent.forInternalRequests(), RETRY_POLICY), baseUrl, level);
+    protected VipCoreConnector(Client httpClient, UserAgent userAgent, String baseUrl, TimingLogLevel level) {
+        this(FailSafeHttpClient.create(httpClient, userAgent, RETRY_POLICY), baseUrl, level);
     }
 
     /**

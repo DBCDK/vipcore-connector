@@ -1,19 +1,19 @@
 package dk.dbc.vipcore.service;
 
+import dk.dbc.commons.useragent.UserAgent;
 import dk.dbc.httpclient.HttpClient;
 import dk.dbc.vipcore.VipCoreConnector;
-import org.eclipse.microprofile.config.inject.ConfigProperty;
-import org.glassfish.jersey.client.ClientConfig;
-import org.glassfish.jersey.jackson.JacksonFeature;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import jakarta.annotation.PostConstruct;
 import jakarta.annotation.PreDestroy;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.inject.Produces;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.client.Client;
+import org.eclipse.microprofile.config.inject.ConfigProperty;
+import org.glassfish.jersey.client.ClientConfig;
+import org.glassfish.jersey.jackson.JacksonFeature;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * VipCoreServiceConnector factory
@@ -50,14 +50,14 @@ public class VipCoreServiceConnectorFactory {
         final Client client = HttpClient.newClient(new ClientConfig()
                 .register(new JacksonFeature()));
         LOGGER.info("Creating VipCoreServiceConnector for: {}", vipcoreServiceBaseUrl);
-        return new VipCoreServiceConnector(client, vipcoreServiceBaseUrl);
+        return new VipCoreServiceConnector(client, UserAgent.forInternalRequests(), vipcoreServiceBaseUrl);
     }
 
     public static VipCoreServiceConnector create(String vipcoreServiceBaseUrl, int cacheAge, VipCoreConnector.TimingLogLevel level) {
         final Client client = HttpClient.newClient(new ClientConfig()
                 .register(new JacksonFeature()));
         LOGGER.info("Creating VipCoreServiceConnector for: {}", vipcoreServiceBaseUrl);
-        return new VipCoreServiceConnector(client, vipcoreServiceBaseUrl, cacheAge, level);
+        return new VipCoreServiceConnector(client, UserAgent.forInternalRequests(), vipcoreServiceBaseUrl, cacheAge, level);
     }
 
     @Inject
