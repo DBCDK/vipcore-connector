@@ -1,0 +1,18 @@
+{
+  "agencyInfo": [
+    {
+      "pickupAgency": {
+        "agencyName": "Halsnæs Bibliotekerne",
+        "agencyId": "726000",
+        "agencyType": "Folkebibliotek"
+      }
+    },
+    {
+      "pickupAgency": {
+        "agencyName": "Halsnæs Bibliotekerne",
+        "agencyId": "726000",
+        "agencyType": "Folkebibliotek"
+      }
+    }
+  ]
+}

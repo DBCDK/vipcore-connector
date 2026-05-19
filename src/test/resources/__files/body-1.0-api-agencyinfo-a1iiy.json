@@ -1,0 +1,18 @@
+{
+  "agencyInfo": [
+    {
+      "pickupAgency": {
+        "agencyName": "DBC-Testbiblioteksvæsen",
+        "agencyId": "790900",
+        "agencyType": "Folkebibliotek"
+      }
+    },
+    {
+      "pickupAgency": {
+        "agencyName": "DBC-Testbiblioteksvæsen",
+        "agencyId": "790900",
+        "agencyType": "Folkebibliotek"
+      }
+    }
+  ]
+}
