@@ -29,6 +29,8 @@ public abstract class VipCoreConnector {
         TRACE, DEBUG, INFO, WARN, ERROR
     }
 
+    static final long LOG_DURATION_THRESHOLD_MS = 10;
+
     private static final Logger LOGGER = LoggerFactory.getLogger(VipCoreConnector.class);
 
     private static final RetryPolicy<Response> RETRY_POLICY = new RetryPolicy<Response>()
@@ -118,7 +120,7 @@ public abstract class VipCoreConnector {
     protected <T> T postRequest(String basePath,
                                 String data,
                                 Class<T> type) throws VipCoreException {
-        final StopWatch watch = new Log4JStopWatch();
+        final StopWatch watch = new Log4JStopWatch().setTimeThreshold(LOG_DURATION_THRESHOLD_MS);
         try {
             final HttpPost httpPost = new HttpPost(failSafeHttpClient)
                     .withBaseUrl(baseUrl)
