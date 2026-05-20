@@ -1,0 +1,24 @@
+{
+  "id" : "da3b5529-4e4e-3768-a465-a7a92e9537bd",
+  "request" : {
+    "url" : "/1.0/api/agencyinfo",
+    "method" : "POST",
+    "bodyPatterns" : [ {
+      "equalToJson" : "{\"agencyId\":\"790900\"}",
+      "ignoreArrayOrder" : true,
+      "ignoreExtraElements" : true
+    } ]
+  },
+  "response" : {
+    "status" : 200,
+    "bodyFileName" : "body-1.0-api-agencyinfo-a1iiy.json",
+    "headers" : {
+      "X-Frame-Options" : "SAMEORIGIN",
+      "Keep-Alive" : "timeout=10s",
+      "Server" : "Payara Micro #badassfish",
+      "Cluster-Node" : "vipcore-2",
+      "Content-Type" : "application/json"
+    }
+  },
+  "uuid" : "da3b5529-4e4e-3768-a465-a7a92e9537bd"
+}

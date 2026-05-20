@@ -6,6 +6,7 @@
 package dk.dbc.vipcore;
 
 import dk.dbc.commons.useragent.UserAgent;
+import dk.dbc.vipcore.agencyinfo.VipCoreAgencyInfoConnector;
 import dk.dbc.vipcore.exception.VipCoreException;
 import dk.dbc.vipcore.libraryrules.VipCoreLibraryRulesConnector;
 import dk.dbc.vipcore.service.VipCoreServiceConnector;
@@ -28,12 +29,16 @@ public class VipCoreConnectorWireMockRecorder {
                 VipCoreLibraryRulesConnectorTest.CLIENT, userAgent,"http://localhost:8080");
         VipCoreServiceConnectorTest.connector = new VipCoreServiceConnector(
                 VipCoreServiceConnectorTest.CLIENT, userAgent,"http://localhost:8080");
+        VipCoreAgencyInfoConnectorTest.connector = new VipCoreAgencyInfoConnector(
+                VipCoreAgencyInfoConnectorTest.CLIENT, userAgent,"http://localhost:8080");
 
         final VipCoreLibraryRulesConnectorTest vipCoreLibraryRulesConnectorTest = new VipCoreLibraryRulesConnectorTest();
         final VipCoreServiceConnectorTest vipCoreServiceConnectorTest = new VipCoreServiceConnectorTest();
+        final VipCoreAgencyInfoConnectorTest vipCoreAgencyInfoConnectorTest = new VipCoreAgencyInfoConnectorTest();
 
         libraryRulesConnectorTests(vipCoreLibraryRulesConnectorTest);
         serviceConnectorTests(vipCoreServiceConnectorTest);
+        agencyInfoConnectorTests(vipCoreAgencyInfoConnectorTest);
     }
 
     private static void libraryRulesConnectorTests(VipCoreLibraryRulesConnectorTest connectorTest)
@@ -52,5 +57,10 @@ public class VipCoreConnectorWireMockRecorder {
     private static void serviceConnectorTests(VipCoreServiceConnectorTest connectorTest) throws VipCoreException {
         connectorTest.getInformationTest_010100();
         connectorTest.getInformationTest_716700();
+    }
+
+    private static void agencyInfoConnectorTests(VipCoreAgencyInfoConnectorTest connectorTest) throws VipCoreException {
+        connectorTest.getNameTest();
+        connectorTest.getNameErrorTest();
     }
 }
